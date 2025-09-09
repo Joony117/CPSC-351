@@ -133,6 +133,7 @@
       <a name="facing" val="west"/>
       <a name="label" val="D"/>
       <a name="output" val="true"/>
+      <a name="radix" val="10unsigned"/>
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(1020,680)" name="Pin">
