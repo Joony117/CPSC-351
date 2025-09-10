@@ -174,16 +174,16 @@
 
     <div class="section">
         <div class="section-title">1. Introduction</div>
-        <p>This lab demonstrates the fundamental principles of digital circuit design through the implementation of a hierarchical 4-bit full adder. The design showcases three key architectural principles:</p>
+        <p>In this lab, we implemented a hierarchical 4-bit full adder to demonstrate the fundamental principles of digital circuit design. Our design showcases three key architectural principles:</p>
         <ul>
-            <li><strong>Hierarchy:</strong> Building complex circuits from simpler, reusable components</li>
-            <li><strong>Regularity:</strong> Using identical building blocks in a systematic pattern</li>
-            <li><strong>Modularity:</strong> Creating self-contained, well-defined circuit modules</li>
+            <li><strong>Hierarchy:</strong> We built complex circuits from simpler, reusable components</li>
+            <li><strong>Regularity:</strong> We used identical building blocks in a systematic pattern</li>
+            <li><strong>Modularity:</strong> We created self-contained, well-defined circuit modules</li>
         </ul>
         
         <div class="circuit-description">
             <div class="subsection-title">Circuit Overview</div>
-            <p>The 4-bit full adder is constructed using four identical 1-bit full adder modules connected in a ripple-carry configuration. Each 1-bit adder implements the following logic:</p>
+            <p>We constructed the 4-bit full adder using four identical 1-bit full adder modules connected in a ripple-carry configuration. Each 1-bit adder implements the following logic:</p>
             <ul>
                 <li><strong>Sum (S):</strong> S = A ⊕ B ⊕ C<sub>in</sub></li>
                 <li><strong>Carry Out (C<sub>out</sub>):</strong> C<sub>out</sub> = (A·B) + (A·C<sub>in</sub>) + (B·C<sub>in</sub>)</li>
@@ -195,7 +195,7 @@
         <div class="section-title">2. Circuit Design and Implementation</div>
         
         <div class="subsection-title">2.1 One-Bit Full Adder</div>
-        <p>The fundamental building block is a 1-bit full adder that takes three inputs (A, B, C<sub>in</sub>) and produces two outputs (Sum, C<sub>out</sub>). The implementation uses:</p>
+        <p>We designed the fundamental building block as a 1-bit full adder that takes three inputs (A, B, C<sub>in</sub>) and produces two outputs (Sum, C<sub>out</sub>). Our implementation uses:</p>
         <ul>
             <li>Two XOR gates for sum calculation</li>
             <li>Three AND gates for carry generation</li>
@@ -203,7 +203,7 @@
         </ul>
 
         <div class="subsection-title">2.2 Four-Bit Full Adder Architecture</div>
-        <p>The 4-bit adder cascades four 1-bit adders with the carry-out of each stage feeding into the carry-in of the next stage. This creates a ripple-carry adder that can handle 4-bit binary addition with proper carry propagation.</p>
+        <p>We cascaded four 1-bit adders with the carry-out of each stage feeding into the carry-in of the next stage. This creates a ripple-carry adder that can handle 4-bit binary addition with proper carry propagation.</p>
 
         <div class="screenshot-container">
             <img src="Files to Turn In/Lab 1/ScreenShots/step 1.jpg" alt="Initial Circuit Setup" class="screenshot">
@@ -215,7 +215,7 @@
         <div class="section-title">3. Simulation and Testing</div>
         
         <div class="subsection-title">3.1 Test Case: A = 7, B = 1</div>
-        <p>The simulation was performed with the specified test values:</p>
+        <p>We performed the simulation with the specified test values:</p>
         <ul>
             <li><strong>A = 7</strong> (binary: 0111)</li>
             <li><strong>B = 1</strong> (binary: 0001)</li>
@@ -233,7 +233,7 @@
         </div>
 
         <div class="subsection-title">3.2 Step-by-Step Simulation</div>
-        <p>The following screenshots demonstrate the ripple-carry propagation through the circuit:</p>
+        <p>The following screenshots demonstrate the ripple-carry propagation through our circuit:</p>
 
         <div class="screenshot-container">
             <img src="Files to Turn In/Lab 1/ScreenShots/step 4.jpg" alt="Simulation Step 4" class="screenshot">
@@ -292,7 +292,7 @@
             <div class="question-text">Question 1: Why do you think you were asked to use the input values 7 and 1 for your simulation?</div>
         </div>
         <div class="answer">
-            <p>The input values A = 7 and B = 1 were specifically chosen to demonstrate several important aspects of the 4-bit full adder:</p>
+            <p>We believe the input values A = 7 and B = 1 were specifically chosen to demonstrate several important aspects of the 4-bit full adder:</p>
             <ul>
                 <li><strong>Carry Propagation:</strong> The addition 7 + 1 = 8 requires a carry to propagate from the least significant bit (LSB) through multiple stages, demonstrating the ripple-carry mechanism.</li>
                 <li><strong>Binary Representation:</strong> 7 (0111) + 1 (0001) = 8 (1000) shows a clear transition in binary representation that's easy to verify.</li>
@@ -306,7 +306,7 @@
             <div class="question-text">Question 2: How would the operation of the multibit adder change if you used 4 and 2 as input values?</div>
         </div>
         <div class="answer">
-            <p>Using A = 4 and B = 2 would result in the following:</p>
+            <p>If we used A = 4 and B = 2, we would observe the following:</p>
             <ul>
                 <li><strong>Input Values:</strong> A = 4 (binary: 0100), B = 2 (binary: 0010)</li>
                 <li><strong>Expected Result:</strong> 4 + 2 = 6 (binary: 0110)</li>
@@ -327,23 +327,23 @@
             <div class="question-text">Question 3: How would the operation of the multibit adder change if you did not reset the simulation before changing the inputs?</div>
         </div>
         <div class="answer">
-            <p>Not resetting the simulation before changing inputs would cause several issues:</p>
+            <p>If we did not reset the simulation before changing inputs, we would encounter several issues:</p>
             <ul>
                 <li><strong>State Persistence:</strong> The circuit would retain the previous simulation state, including any intermediate carry values and signal propagation states.</li>
                 <li><strong>Incorrect Results:</strong> The new inputs (A = 4, B = 2) would be processed with residual carry signals from the previous calculation (7 + 1), leading to incorrect results.</li>
                 <li><strong>Timing Issues:</strong> The simulation would not start from a clean state, potentially causing timing violations or race conditions.</li>
                 <li><strong>Debugging Difficulties:</strong> It would be impossible to verify the correctness of the new calculation since the circuit state would be contaminated.</li>
-                <li><strong>Educational Confusion:</strong> Students would not be able to clearly observe the step-by-step operation of the circuit for the new inputs.</li>
+                <li><strong>Educational Confusion:</strong> We would not be able to clearly observe the step-by-step operation of the circuit for the new inputs.</li>
             </ul>
-            <p><strong>Best Practice:</strong> Always reset the simulation (Cmd+R or Ctrl+R) before changing inputs to ensure a clean starting state and accurate results.</p>
+            <p><strong>Best Practice:</strong> We always reset the simulation (Cmd+R or Ctrl+R) before changing inputs to ensure a clean starting state and accurate results.</p>
         </div>
     </div>
 
     <div class="section">
         <div class="section-title">5. Troubleshooting and Challenges</div>
-        <p>During the implementation and testing of this lab, several challenges were encountered and resolved:</p>
+        <p>During our implementation and testing of this lab, we encountered several challenges and resolved them:</p>
         <ul>
-            <li><strong>Initial Wiring Issues:</strong> The first attempt at the 1-bit adder had incorrect gate connections, which was resolved by carefully following the truth table and logic equations.</li>
+            <li><strong>Initial Wiring Issues:</strong> Our first attempt at the 1-bit adder had incorrect gate connections, which we resolved by carefully following the truth table and logic equations.</li>
             <li><strong>Carry Propagation:</strong> Ensuring proper carry-out to carry-in connections between the 1-bit adder stages required careful attention to pin assignments.</li>
             <li><strong>Input/Output Configuration:</strong> Setting the correct radix (binary) for the input pins was crucial for proper simulation and result interpretation.</li>
             <li><strong>Simulation Timing:</strong> Understanding when to pause, reset, and step through the simulation required practice with the Logisim-evolution interface.</li>
