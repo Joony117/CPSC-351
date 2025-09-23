@@ -65,16 +65,19 @@
       <a name="facing" val="west"/>
       <a name="label" val="Y"/>
       <a name="output" val="true"/>
+      <a name="radix" val="10signed"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(510,160)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="A"/>
+      <a name="radix" val="10signed"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(510,250)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="B"/>
+      <a name="radix" val="10signed"/>
       <a name="width" val="8"/>
     </comp>
     <comp lib="0" loc="(660,500)" name="Pin">
