@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENG 351 Lab 2: ALU (Arithmetic Logic Unit)</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px;
+            background-color: white;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .course-info {
+            font-size: 14px;
+            color: #95a5a6;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .subsection-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        
+        .screenshot-container {
+            text-align: center;
+            margin: 10px 0;
+            page-break-inside: avoid;
+            display: inline-block;
+            width: 30%;
+            vertical-align: top;
+            padding: 5px;
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 200px;
+            width: auto;
+        }
+        
+        .screenshot-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        
+        .screenshot-caption {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .question {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 15px 0;
+        }
+        
+        .question-text {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .answer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 10px 0;
+        }
+        
+        .circuit-description {
+            background-color: #fff3cd;
+            padding: 15px;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .truth-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .truth-table th,
+        .truth-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .truth-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .truth-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .conclusion {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border: 1px solid #27ae60;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        
+        .team-info {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .alu-function {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .function-code {
+            font-family: 'Courier New', monospace;
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body { margin: 20px; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">CENG 351: Computer Architecture I</div>
+        <div class="subtitle">Lab 2: ALU (Arithmetic Logic Unit)</div>
+        <div class="course-info">8-Bit ALU Implementation and Comprehensive Testing</div>
+    </div>
+
+    <div class="team-info">
+        <div class="subsection-title">Team Information</div>
+        <p><strong>Lab Partners:</strong> Gabriel Giancarlo, Jun Yi</p>
+        <p><strong>Contributions:</strong></p>
+        <ul>
+            <li><strong>Jun Yi:</strong> ALU circuit design and implementation in Logisim-evolution, comprehensive testing of all ALU functions, screenshot capture for each operation, and simulation execution</li>
+            <li><strong>Gabriel Giancarlo:</strong> Circuit verification and validation, comprehensive report writing, technical analysis of ALU operations, and detailed answers to all lab questions</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">1. Introduction</div>
+        <p>In this lab, we implemented an 8-bit Arithmetic Logic Unit (ALU) to demonstrate the fundamental operations performed by the central processing unit of a computer. Our design showcases the versatility of digital circuits in performing both arithmetic and logical operations on binary data.</p>
+        
+        <div class="circuit-description">
+            <div class="subsection-title">ALU Overview</div>
+            <p>Our 8-bit ALU takes two 8-bit inputs (A and B) and a 3-bit function code (F) to determine the operation. The ALU supports seven distinct operations:</p>
+            <ul>
+                <li><strong>Arithmetic Operations:</strong> Addition (A + B), Subtraction (A - B), Set Less Than (SLT)</li>
+                <li><strong>Logical Operations:</strong> AND (A & B), OR (A | B), AND with inverted B (A & ~B), OR with inverted B (A | ~B)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">2. ALU Design and Implementation</div>
+        
+        <div class="subsection-title">2.1 ALU Architecture</div>
+        <p>Our 8-bit ALU follows the standard design pattern with the following key components:</p>
+        <ul>
+            <li><strong>Input Selection:</strong> F<sub>2</sub> bit controls whether to use B or ~B as input to the adder</li>
+            <li><strong>Adder Unit:</strong> 8-bit full adder for arithmetic operations</li>
+            <li><strong>Logic Gates:</strong> AND and OR gates for logical operations</li>
+            <li><strong>Output Multiplexer:</strong> 4-input multiplexer selects the appropriate output based on function code</li>
+            <li><strong>SLT Logic:</strong> Uses the most significant bit of the adder output, zero-extended to 8 bits</li>
+        </ul>
+
+        <div class="subsection-title">2.2 Function Code Mapping</div>
+        <table class="truth-table">
+            <tr>
+                <th>F<sub>2</sub>F<sub>1</sub>F<sub>0</sub></th>
+                <th>Function Code</th>
+                <th>Operation</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>000</td>
+                <td>0</td>
+                <td>A & B</td>
+                <td>Bitwise AND</td>
+            </tr>
+            <tr>
+                <td>001</td>
+                <td>1</td>
+                <td>A | B</td>
+                <td>Bitwise OR</td>
+            </tr>
+            <tr>
+                <td>010</td>
+                <td>2</td>
+                <td>A + B</td>
+                <td>Addition</td>
+            </tr>
+            <tr>
+                <td>100</td>
+                <td>4</td>
+                <td>A & ~B</td>
+                <td>AND with inverted B</td>
+            </tr>
+            <tr>
+                <td>101</td>
+                <td>5</td>
+                <td>A | ~B</td>
+                <td>OR with inverted B</td>
+            </tr>
+            <tr>
+                <td>110</td>
+                <td>6</td>
+                <td>A - B</td>
+                <td>Subtraction</td>
+            </tr>
+            <tr>
+                <td>111</td>
+                <td>7</td>
+                <td>SLT</td>
+                <td>Set Less Than</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">3. Comprehensive Testing and Simulation</div>
+        
+        <div class="subsection-title">3.1 Test Strategy</div>
+        <p>We systematically tested all seven ALU functions using various input combinations to ensure comprehensive validation of our design. Each function was tested with multiple input values to verify correctness across different scenarios.</p>
+
+        <div class="subsection-title">3.2 Function-by-Function Testing</div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 000: A & B (Bitwise AND)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A&B(000)/1-1.png" alt="A & B Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 1: A & B operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A&B(000)/1-2.png" alt="A & B Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 2: A & B operation showing bitwise AND result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A&B(000)/1-3.png" alt="A & B Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 3: A & B operation final result</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 001: A | B (Bitwise OR)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_or_B(001)/2-1.png" alt="A | B Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 4: A | B operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_or_B(001)/2-2.png" alt="A | B Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 5: A | B operation showing bitwise OR result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_or_B(001)/2-3.png" alt="A | B Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 6: A | B operation final result</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 010: A + B (Addition)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_+_B(010)/3-1.png" alt="A + B Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 7: A + B operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_+_B(010)/3-2.png" alt="A + B Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 8: A + B operation showing addition result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_+_B(010)/3-3.png" alt="A + B Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 9: A + B operation intermediate step</div>
+                </div>
+            </div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_+_B(010)/3-4.png" alt="A + B Test 4" class="screenshot">
+                    <div class="screenshot-caption">Figure 10: A + B operation final result</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 100: A & ~B (AND with inverted B)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A&~B(100)/4-1.png" alt="A & ~B Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 11: A & ~B operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A&~B(100)/4-2.png" alt="A & ~B Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 12: A & ~B operation showing result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A&~B(100)/4-3.png" alt="A & ~B Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 13: A & ~B operation final result</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 101: A | ~B (OR with inverted B)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_or_~B(101)/5-1.png" alt="A | ~B Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 14: A | ~B operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_or_~B(101)/5-2.png" alt="A | ~B Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 15: A | ~B operation showing result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_or_~B(101)/5-3.png" alt="A | ~B Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 16: A | ~B operation final result</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 110: A - B (Subtraction)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_minus_B(110)/6-1.png" alt="A - B Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 17: A - B operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_minus_B(110)/6-2.png" alt="A - B Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 18: A - B operation showing subtraction result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_minus_B(110)/6-3.png" alt="A - B Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 19: A - B operation intermediate step</div>
+                </div>
+            </div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_A_minus_B(110)/6-4.png" alt="A - B Test 4" class="screenshot">
+                    <div class="screenshot-caption">Figure 20: A - B operation final result</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alu-function">
+            <div class="subsection-title">Function 111: SLT (Set Less Than)</div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_SLT(111)/7-1.png" alt="SLT Test 1" class="screenshot">
+                    <div class="screenshot-caption">Figure 21: SLT operation with test inputs</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_SLT(111)/7-2.png" alt="SLT Test 2" class="screenshot">
+                    <div class="screenshot-caption">Figure 22: SLT operation showing comparison result</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_SLT(111)/7-3.png" alt="SLT Test 3" class="screenshot">
+                    <div class="screenshot-caption">Figure 23: SLT operation intermediate step</div>
+                </div>
+            </div>
+            <div class="screenshot-row">
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_SLT(111)/7-4.png" alt="SLT Test 4" class="screenshot">
+                    <div class="screenshot-caption">Figure 24: SLT operation showing MSB extraction</div>
+                </div>
+                <div class="screenshot-container">
+                    <img src="ALL_ScreenShots/ALL_ALU_Functions_ScreenShots(INCLUDE_THIS)/ScreenShots_For_SLT(111)/7-5.png" alt="SLT Test 5" class="screenshot">
+                    <div class="screenshot-caption">Figure 25: SLT operation final result with zero extension</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="subsection-title">3.3 Completed ALU Schematic</div>
+        <div class="screenshot-container">
+            <img src="ALL_ScreenShots/Completed_Schematic(INCLUDE_THIS)/Completed_Schematic_ALU.png" alt="Completed ALU Schematic" class="screenshot">
+            <div class="screenshot-caption">Figure 26: Complete 8-bit ALU schematic showing all components and interconnections</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">4. Lab Questions and Analysis</div>
+
+        <div class="question">
+            <div class="question-text">Question 1: Why are there always three function bits regardless of the size of the inputs and outputs?</div>
+        </div>
+        <div class="answer">
+            <p>The number of function bits (3) is determined by the number of distinct operations the ALU can perform, not by the width of the data inputs and outputs. Here's why three function bits are sufficient and necessary:</p>
+            <ul>
+                <li><strong>Operation Count:</strong> Our ALU supports 7 distinct operations (A&B, A|B, A+B, A&~B, A|~B, A-B, SLT), which requires at least 3 bits to encode (2³ = 8 possible combinations, with one unused).</li>
+                <li><strong>Independence from Data Width:</strong> The function code determines <em>what operation</em> to perform, while the data width determines <em>how many bits</em> the operation works on. These are orthogonal concerns.</li>
+                <li><strong>Standardization:</strong> Using a fixed number of function bits (3) allows for consistent instruction encoding across different processor architectures, regardless of whether the ALU operates on 8-bit, 16-bit, 32-bit, or 64-bit data.</li>
+                <li><strong>Efficiency:</strong> Three bits provide a good balance between the number of supported operations and instruction encoding efficiency. Adding more function bits would increase instruction size without necessarily adding useful operations.</li>
+                <li><strong>Hardware Simplicity:</strong> A 3-bit function code can be decoded using a simple 3-to-8 decoder, making the control logic straightforward and efficient.</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-text">Question 2: Is it feasible to test every possible combination of inputs for an 8-bit ALU? Is it more or less difficult for a 32-bit ALU?</div>
+        </div>
+        <div class="answer">
+            <p>Testing every possible combination of inputs becomes exponentially more difficult as the data width increases:</p>
+            <ul>
+                <li><strong>8-bit ALU Analysis:</strong>
+                    <ul>
+                        <li>Total input combinations: 2⁸ × 2⁸ = 2¹⁶ = 65,536 combinations per function</li>
+                        <li>For 7 functions: 7 × 65,536 = 458,752 total test cases</li>
+                        <li><strong>Feasibility:</strong> While computationally intensive, this is technically feasible with automated testing tools and sufficient time.</li>
+                    </ul>
+                </li>
+                <li><strong>32-bit ALU Analysis:</strong>
+                    <ul>
+                        <li>Total input combinations: 2³² × 2³² = 2⁶⁴ ≈ 1.84 × 10¹⁹ combinations per function</li>
+                        <li>For 7 functions: 7 × 2⁶⁴ ≈ 1.29 × 10²⁰ test cases</li>
+                        <li><strong>Feasibility:</strong> Completely infeasible with current technology. Even at 1 billion tests per second, it would take approximately 4.09 × 10¹⁰ years to complete.</li>
+                    </ul>
+                </li>
+                <li><strong>Exponential Growth:</strong> The difficulty increases exponentially: 32-bit testing is 2⁴⁸ times more difficult than 8-bit testing.</li>
+                <li><strong>Practical Implications:</strong> This exponential growth is why exhaustive testing is only practical for small circuits, and why more sophisticated testing strategies (equivalence classes, boundary value testing, random testing) are essential for larger systems.</li>
+            </ul>
+        </div>
+
+        <div class="question">
+            <div class="question-text">Question 3: What do you think is the best approach for testing a 32-bit ALU design?</div>
+        </div>
+        <div class="answer">
+            <p>Given the infeasibility of exhaustive testing for a 32-bit ALU, the best approach combines multiple testing strategies:</p>
+            <ul>
+                <li><strong>Equivalence Class Testing:</strong>
+                    <ul>
+                        <li>Test representative values from different ranges (small positive, large positive, small negative, large negative)</li>
+                        <li>Include boundary values (0, -1, 2³¹-1, -2³¹)</li>
+                        <li>Test special cases (all zeros, all ones, alternating patterns)</li>
+                    </ul>
+                </li>
+                <li><strong>Functional Testing by Operation:</strong>
+                    <ul>
+                        <li>Arithmetic operations: Test overflow, underflow, and normal cases</li>
+                        <li>Logical operations: Test with various bit patterns to ensure proper bitwise behavior</li>
+                        <li>SLT operation: Test with positive/negative combinations and edge cases</li>
+                    </ul>
+                </li>
+                <li><strong>Random Testing:</strong>
+                    <ul>
+                        <li>Generate thousands of random input pairs for each function</li>
+                        <li>Use statistical analysis to ensure good coverage</li>
+                        <li>Focus on corner cases that might be missed by systematic testing</li>
+                    </ul>
+                </li>
+                <li><strong>Formal Verification:</strong>
+                    <ul>
+                        <li>Use mathematical proofs to verify correctness for all possible inputs</li>
+                        <li>Model checking to verify properties hold for all states</li>
+                        <li>Theorem proving for critical correctness properties</li>
+                    </ul>
+                </li>
+                <li><strong>Property-Based Testing:</strong>
+                    <ul>
+                        <li>Define properties that should hold for all inputs (e.g., commutativity of addition)</li>
+                        <li>Use automated tools to generate test cases that violate these properties</li>
+                        <li>Verify that the ALU maintains these properties across all test cases</li>
+                    </ul>
+                </li>
+                <li><strong>Simulation and Emulation:</strong>
+                    <ul>
+                        <li>Use high-level language simulations to generate expected results</li>
+                        <li>Compare ALU outputs with known-correct reference implementations</li>
+                        <li>Use FPGA emulation for hardware-in-the-loop testing</li>
+                    </ul>
+                </li>
+            </ul>
+            <p><strong>Recommended Strategy:</strong> Combine equivalence class testing (for systematic coverage), random testing (for unexpected cases), and formal verification (for mathematical certainty) to achieve comprehensive validation while remaining computationally feasible.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">5. Troubleshooting and Challenges</div>
+        <p>During our implementation and testing of the 8-bit ALU, we encountered several challenges and resolved them:</p>
+        <ul>
+            <li><strong>Multiplexer Configuration:</strong> Initially, we had difficulty configuring the 4-input multiplexer to properly select outputs based on the function code. We resolved this by carefully mapping the function bits to the multiplexer select inputs.</li>
+            <li><strong>SLT Implementation:</strong> The Set Less Than operation required careful implementation of the MSB extraction and zero extension. We had to ensure the bit extender was configured correctly to zero-extend the single MSB to an 8-bit output.</li>
+            <li><strong>Subtraction Logic:</strong> Implementing subtraction using two's complement required proper configuration of the F<sub>2</sub> bit to control both the B input inversion and the carry-in to the adder.</li>
+            <li><strong>Input/Output Configuration:</strong> Setting the correct radix (binary) for all input and output pins was crucial for proper simulation and result interpretation across all test cases.</li>
+            <li><strong>Simulation Timing:</strong> Understanding when to pause, reset, and step through the simulation for each function required careful coordination to capture meaningful screenshots.</li>
+            <li><strong>Wire Management:</strong> With 8-bit data paths and multiple components, keeping the circuit organized and readable required careful planning of wire routing and component placement.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">6. Conclusion</div>
+        <div class="conclusion">
+            <p>This lab successfully demonstrated the implementation of a comprehensive 8-bit ALU capable of performing both arithmetic and logical operations. Key achievements include:</p>
+            <ul>
+                <li>✓ Correct implementation of all seven ALU functions using standard digital logic components</li>
+                <li>✓ Successful integration of arithmetic and logical operations in a single, unified design</li>
+                <li>✓ Comprehensive testing and verification of all ALU functions with multiple test cases</li>
+                <li>✓ Proper handling of two's complement arithmetic for addition and subtraction operations</li>
+                <li>✓ Correct implementation of the SLT operation using MSB extraction and zero extension</li>
+                <li>✓ Understanding of ALU design principles and their application in processor architecture</li>
+            </ul>
+            <p>The ALU correctly performs all seven operations as specified, demonstrating proper binary arithmetic, logical operations, and comparison functionality. The comprehensive testing approach validates the correctness of our implementation across various input combinations, providing confidence in the design's reliability and functionality.</p>
+            <p>This lab provided valuable insight into the fundamental building blocks of computer processors and the complexity involved in designing arithmetic and logical units that can handle multiple operations efficiently.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">7. References</div>
+        <ul>
+            <li>Logisim-evolution Documentation: https://github.com/logisim-evolution/logisim-evolution</li>
+            <li>Digital Design and Computer Architecture, Harris & Harris</li>
+            <li>CENG 351 Course Materials: Computer Architecture I</li>
+            <li>MIPS Architecture Reference Manual</li>
+            <li>Computer Organization and Design, Patterson & Hennessy</li>
+        </ul>
+    </div>
+</body>
+</html>
