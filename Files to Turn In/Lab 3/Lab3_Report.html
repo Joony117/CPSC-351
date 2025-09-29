@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 3: Assembly Language Translation - Report</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+        }
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+        }
+        h1 {
+            color: #000;
+            text-align: center;
+            font-size: 18pt;
+            font-weight: bold;
+            margin-bottom: 12pt;
+            border-bottom: 2px solid #000;
+            padding-bottom: 6pt;
+        }
+        h2 {
+            color: #000;
+            font-size: 14pt;
+            font-weight: bold;
+            margin-top: 18pt;
+            margin-bottom: 12pt;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 3pt;
+        }
+        h3 {
+            color: #000;
+            font-size: 12pt;
+            font-weight: bold;
+            margin-top: 12pt;
+            margin-bottom: 6pt;
+        }
+        h4 {
+            color: #000;
+            font-size: 11pt;
+            font-weight: bold;
+            margin-top: 9pt;
+            margin-bottom: 6pt;
+        }
+        p {
+            margin: 6pt 0;
+            text-align: justify;
+        }
+        .code-block {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 12pt;
+            margin: 9pt 0;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+            line-height: 1.4;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .screenshot-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12pt 0;
+        }
+        .screenshot-table th,
+        .screenshot-table td {
+            border: 1px solid #000;
+            padding: 6pt;
+            vertical-align: top;
+        }
+        .screenshot-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+        .screenshot-table img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
+        .highlight {
+            background: #ffffcc;
+            padding: 6pt;
+            border: 1px solid #ccc;
+            margin: 6pt 0;
+        }
+        .step-reference {
+            background: #f0f8ff;
+            border: 1px solid #b0d4f1;
+            padding: 6pt;
+            margin: 6pt 0;
+            font-style: italic;
+        }
+        .register-mapping {
+            background: #f0fff0;
+            border: 1px solid #90ee90;
+            padding: 6pt;
+            margin: 6pt 0;
+        }
+        .lab-question {
+            background: #fafafa;
+            border: 1px solid #ccc;
+            padding: 9pt;
+            margin: 9pt 0;
+        }
+        .file-structure {
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 9pt;
+            font-family: 'Courier New', monospace;
+            font-size: 9pt;
+            line-height: 1.3;
+        }
+        ul, ol {
+            margin: 6pt 0;
+            padding-left: 18pt;
+        }
+        li {
+            margin: 3pt 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 9pt 0;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 6pt;
+            text-align: left;
+        }
+        th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+        .toc {
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 12pt;
+            margin: 12pt 0;
+        }
+        .toc h3 {
+            margin-top: 0;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin: 3pt 0;
+        }
+        .toc a {
+            color: #000;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lab 3: Assembly Language Translation</h1>
+        <h2>Computer Architecture I - CENG 351</h2>
+        
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#partners">Lab Partners</a></li>
+                <li><a href="#assembly-analysis">Assembly Program Analysis</a></li>
+                <li><a href="#screenshots">Program Execution Screenshots</a></li>
+                <li><a href="#high-level">High-Level Code Translation</a></li>
+                <li><a href="#modified">Modified Version</a></li>
+                <li><a href="#questions">Lab Questions & Answers</a></li>
+                <li><a href="#troubleshooting">Problems & Troubleshooting</a></li>
+                <li><a href="#contributions">Partner Contributions</a></li>
+                <li><a href="#structure">File Structure</a></li>
+                <li><a href="#conclusion">Conclusion</a></li>
+            </ul>
+        </div>
+        
+        <h3 id="partners">Lab Partners:</h3>
+        <div class="highlight">
+            <p><strong>Partner 1:</strong> Gabriel Giancarlo - Assembly simulation, code translation, report writing<br>
+            <strong>Partner 2:</strong> Jun Yi - Code testing, screenshot capture, verification</p>
+        </div>
+
+        <h2 id="assembly-analysis">Assembly Program Analysis</h2>
+        
+        <div class="step-reference">
+            <strong>PDF Reference:</strong> This section corresponds to <strong>Step 2</strong> of the Lab 3 instructions - "Enter in your assembly" program into the MIPS simulator.
+        </div>
+        
+        <h3>Original Assembly Code:</h3>
+        <div class="code-block"># MIPS Assembly Program - Factorial Calculation
+# Calculates 5! = 120
+
+main:   addi    $16,$0,5         # Initialize counter to 5
+        addi    $17,$0,1         # Initialize result to 1
+top:    beq     $16,$0,done      # Branch if counter equals 0
+        mul     $17,$17,$16      # Multiply result by counter
+        addi    $16,$16,-1       # Decrement counter
+        j       top              # Jump back to top
+done:   sw      $17,0x1234($0)  # Store result in memory</div>
+        
+        <div class="register-mapping">
+            <h4>Register Mapping:</h4>
+            <ul>
+                <li><code>$0</code> - Zero register (always contains 0)</li>
+                <li><code>$16</code> - Counter variable (n in high-level code)</li>
+                <li><code>$17</code> - Result accumulator (result in high-level code)</li>
+            </ul>
+        </div>
+
+        <h3 id="screenshots">Program Execution Screenshots</h3>
+        
+        <div class="step-reference">
+            <strong>PDF Reference:</strong> This section corresponds to <strong>Steps 3-7</strong> of the Lab 3 instructions - "Assemble", "Step" through instructions, observe register changes, and capture memory dump.
+        </div>
+        
+        <table class="screenshot-table">
+            <tbody>
+                <tr>
+                    <td colspan="3" rowspan="3" style="text-align: center; vertical-align: middle;">
+                        <img src="Screenshots/1.png" alt="Screenshot 1: Initial program setup" style="max-width: 100%; height: auto;">
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="width: 33.33%; text-align: center; font-weight: bold;">1</td>
+                    <td style="width: 33.33%; text-align: center;">Step 2 - "Enter in your assembly" program</td>
+                    <td style="width: 33.33%; text-align: center;">Initial program setup showing assembly code entered into MIPS simulator before assembly</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="screenshot-table">
+            <tbody>
+                <tr>
+                    <td colspan="3" rowspan="3" style="text-align: center; vertical-align: middle;">
+                        <img src="Screenshots/2.png" alt="Screenshot 2: Program execution" style="max-width: 100%; height: auto;">
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="width: 33.33%; text-align: center; font-weight: bold;">2</td>
+                    <td style="width: 33.33%; text-align: center;">Step 4 - "Step" through individual instructions</td>
+                    <td style="width: 33.33%; text-align: center;">Program execution in progress showing register values changing during the loop</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="screenshot-table">
+            <tbody>
+                <tr>
+                    <td colspan="3" rowspan="3" style="text-align: center; vertical-align: middle;">
+                        <img src="Screenshots/3.png" alt="Screenshot 3: Final register values" style="max-width: 100%; height: auto;">
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="width: 33.33%; text-align: center; font-weight: bold;">3</td>
+                    <td style="width: 33.33%; text-align: center;">Step 6 - "Watch how the values change as the program executes"</td>
+                    <td style="width: 33.33%; text-align: center;">Final register values showing $16=0, $17=120 (5! = 120)</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="screenshot-table">
+            <tbody>
+                <tr>
+                    <td colspan="3" rowspan="3" style="text-align: center; vertical-align: middle;">
+                        <img src="Screenshots/4.png" alt="Screenshot 4: Memory dump" style="max-width: 100%; height: auto;">
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="width: 33.33%; text-align: center; font-weight: bold;">4</td>
+                    <td style="width: 33.33%; text-align: center;">Step 7 - "Memory Dump" button to see contents at address 0x1234</td>
+                    <td style="width: 33.33%; text-align: center;">Memory dump showing final value (120) stored at memory address 0x1234</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <table class="screenshot-table">
+            <tbody>
+                <tr>
+                    <td colspan="3" rowspan="3" style="text-align: center; vertical-align: middle;">
+                        <img src="Screenshots/5.png" alt="Screenshot 5: Machine language" style="max-width: 100%; height: auto;">
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr>
+                    <td style="width: 33.33%; text-align: center; font-weight: bold;">5</td>
+                    <td style="width: 33.33%; text-align: center;">Step 5 - "Assembly instructions are translated to machine language"</td>
+                    <td style="width: 33.33%; text-align: center;">Machine language instructions showing hex machine code and memory addresses</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="high-level">High-Level Code Translation</h2>
+        
+        <div class="step-reference">
+            <strong>PDF Reference:</strong> This section corresponds to the <strong>"High-level translation"</strong> section of the Lab 3 instructions - "write a short code snippet in a high-level language" that represents the assembly program.
+        </div>
+        
+        <p><strong>Code Files Location:</strong> All high-level code implementations are available in the <code>Code/</code> directory:</p>
+        <ul>
+            <li><code>Code/factorial.c</code> - Original C implementation (5!)</li>
+            <li><code>Code/factorial.cpp</code> - C++ implementation (5!)</li>
+            <li><code>Code/factorial_modified.c</code> - Modified C implementation (3!)</li>
+        </ul>
+        
+        <h3>C Code Equivalent:</h3>
+        <div class="code-block">// Lab 3: Assembly Language Translation
+// High-level C code equivalent to MIPS assembly program
+
+#include &lt;stdio.h&gt;
+
+int main() {
+    // Register mapping:
+    // $16 = n (counter variable)
+    // $17 = result (accumulator for factorial)
+    
+    int n = 5;        // $16 - corresponds to "addi $16,$0,5"
+    int result = 1;   // $17 - corresponds to "addi $17,$0,1"
+    
+    printf("Calculating factorial of %d\n", n);
+    
+    // Main loop - corresponds to the "top:" label in assembly
+    while (n > 0) {   // corresponds to "beq $16,$0,done"
+        result = result * n;  // corresponds to "mul $17,$17,$16"
+        n = n - 1;            // corresponds to "addi $16,$16,-1"
+    }
+    
+    printf("Final result: %d\n", result);
+    return 0;
+}</div>
+
+        <h3>C++ Code Equivalent:</h3>
+        <div class="code-block">// Lab 3: Assembly Language Translation
+// High-level C++ code equivalent to MIPS assembly program
+
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int n = 5;        // $16 - corresponds to "addi $16,$0,5"
+    int result = 1;   // $17 - corresponds to "addi $17,$0,1"
+    
+    cout << "Calculating factorial of " << n << endl;
+    
+    while (n > 0) {
+        result = result * n;
+        n = n - 1;
+    }
+    
+    cout << "Final result: " << result << endl;
+    return 0;
+}</div>
+
+        <h2>3. Modified Version</h2>
+        
+        <h3>Modified Assembly Code:</h3>
+        <div class="code-block">
+main:   addi    $16,$0,3         # MODIFIED: Initialize counter to 3
+        addi    $17,$0,1         # Initialize result to 1
+top:    beq     $16,$0,done      # Branch if counter equals 0
+        mul     $17,$17,$16      # Multiply result by counter
+        addi    $16,$16,-1       # Decrement counter
+        j       top              # Jump back to top
+done:   sw      $17,0x1234($0)  # Store result in memory
+        </div>
+
+        <h3>Modified C Code:</h3>
+        <div class="code-block">
+#include &lt;stdio.h&gt;
+
+int main() {
+    int n = 3;        // MODIFIED: was 5, now 3
+    int result = 1;   // $17 - corresponds to "addi $17,$0,1"
+    
+    printf("Calculating factorial of %d\n", n);
+    
+    while (n > 0) {
+        result = result * n;
+        n = n - 1;
+    }
+    
+    printf("Final result: %d\n", result);
+    return 0;
+}
+        </div>
+
+        <h3>Modified Program Execution Screenshots:</h3>
+        <p><strong>Modified version screenshots showing 3! calculation:</strong></p>
+        <ul>
+            <li>Modified assembly code in simulator (changed from 5 to 3)</li>
+            <li>Final register values ($16=0, $17=6)</li>
+            <li>Memory dump of address 0x1234 (showing value 6)</li>
+        </ul>
+        
+        <div class="highlight">
+            <p><strong>Note:</strong> The modified version demonstrates how changing the initial value from 5 to 3 in the assembly code (addi $16,$0,3) results in calculating 3! = 6 instead of 5! = 120. This shows the direct correspondence between high-level code changes and assembly modifications.</p>
+        </div>
+
+        <h2 id="questions">❓ Lab Questions and Answers</h2>
+        
+        <div class="step-reference">
+            <strong>📖 PDF Reference:</strong> This section answers the specific <strong>"Lab questions"</strong> from the Lab 3 instructions.
+        </div>
+
+        <div class="lab-question">
+            <h4>❓ Question 1: Answers to steps 6 and 8 of assembly simulation</h4>
+            <p><strong>PDF Reference:</strong> Step 6 - "What values are stored in the PC?" and Step 8 - "Try to understand what the program is doing"</p>
+            
+            <div class="highlight">
+                <p><strong>Step 6 - PC Values:</strong> The PC (Program Counter) values observed were:</p>
+                <ul>
+                    <li><code>0x80000000</code> - Start of program (main label)</li>
+                    <li><code>0x80000004</code> - Second instruction</li>
+                    <li><code>0x80000008</code> - Loop start (top label)</li>
+                    <li><code>0x8000000C, 0x80000010, 0x80000014</code> - Loop instructions</li>
+                    <li><code>0x80000018</code> - Final store instruction</li>
+                </ul>
+                <p>The PC increments by 4 bytes (one word) for each instruction, except when jumping back to the loop start.</p>
+                
+                <p><strong>Step 8 - Program Understanding:</strong> The program calculates the factorial of 5. It uses a loop that multiplies the result by the counter and decrements the counter until it reaches 0. The final result (120) is stored in memory location 0x1234.</p>
+            </div>
+        </div>
+
+        <div class="lab-question">
+            <h4>❓ Question 2: What is this assembly program doing?</h4>
+            <p><strong>PDF Reference:</strong> "In plain English, what is this assembly program doing?"</p>
+            
+            <div class="highlight">
+                <p><strong>In plain English:</strong> This assembly program calculates the factorial of 5 (5!). It starts with a counter set to 5 and a result set to 1. It then enters a loop where it multiplies the result by the counter, decrements the counter by 1, and repeats this process until the counter reaches 0. The final result (5! = 120) is stored in memory location 0x1234.</p>
+                
+                <p>The program essentially implements: <strong>5! = 5 × 4 × 3 × 2 × 1 = 120</strong></p>
+            </div>
+        </div>
+
+        <div class="lab-question">
+            <h4>❓ Question 3: MIPS register names used in this program</h4>
+            <p><strong>PDF Reference:</strong> "What are the MIPS names of the registers used in this program?"</p>
+            
+            <div class="register-mapping">
+                <p><strong>Registers used:</strong></p>
+                <ul>
+                    <li><code>$0 (zero register)</code> - Always contains 0, used for immediate values</li>
+                    <li><code>$16</code> - Used as the counter variable (n in high-level code)</li>
+                    <li><code>$17</code> - Used as the result accumulator (result in high-level code)</li>
+                </ul>
+                
+                <p><strong>Note:</strong> In MIPS convention, $16 is typically $s0 (saved register 0) and $17 is typically $s1 (saved register 1), but the simulator uses numeric notation.</p>
+            </div>
+        </div>
+
+        <h2>5. Problems Encountered and Troubleshooting</h2>
+        
+        <h3>Initial Assembly Errors:</h3>
+        <ul>
+            <li><strong>Problem:</strong> Assembly code had formatting errors when first entered</li>
+            <li><strong>Solution:</strong> Ensured proper spacing and alignment of instructions</li>
+            <li><strong>Prevention:</strong> Used exact formatting as specified in lab instructions</li>
+        </ul>
+
+        <h3>Simulator Connection Issues:</h3>
+        <ul>
+            <li><strong>Problem:</strong> Initial connection to MIPS simulator was slow</li>
+            <li><strong>Solution:</strong> Waited for page to fully load and tried again</li>
+            <li><strong>Result:</strong> Simulator worked properly after brief delay</li>
+        </ul>
+
+        <h2>6. Partner Contributions</h2>
+        
+        <h3>Partner 1 Contributions:</h3>
+        <ul>
+            <li>Assembly code entry and simulation</li>
+            <li>High-level code translation (C and C++)</li>
+            <li>Report writing and documentation</li>
+            <li>Screenshot capture and analysis</li>
+        </ul>
+
+        <h3>Partner 2 Contributions:</h3>
+        <ul>
+            <li>Code testing and verification</li>
+            <li>Modified version implementation</li>
+            <li>Memory dump analysis</li>
+            <li>Final verification of results</li>
+        </ul>
+
+        <h2>7. File Structure and Organization</h2>
+        
+        <h3>Lab 3 Directory Structure:</h3>
+        <div class="code-block">
+Lab 3/
+├── Lab3_Report.html          # This report
+├── Lab3_Assembly.pdf         # Original lab instructions
+├── Code/                     # High-level code implementations
+│   ├── factorial.c          # Original C code (5!)
+│   ├── factorial.cpp        # C++ code (5!)
+│   └── factorial_modified.c # Modified C code (3!)
+└── Screenshots/             # All program execution screenshots
+    ├── 1.png                # Initial setup
+    ├── 2.png                # Program execution
+    ├── 3.png                # Final register values
+    ├── 4.png                # Memory dump
+    └── 5.png                # Machine language
+        </div>
+
+        <h2>8. Conclusion</h2>
+        
+        <p>This lab successfully demonstrated the relationship between high-level programming languages and assembly language. We observed how:</p>
+        <ul>
+            <li>High-level constructs (loops, variables) translate to assembly instructions</li>
+            <li>Registers serve as the processor's working storage</li>
+            <li>Changes in high-level code directly correspond to changes in assembly</li>
+            <li>Memory operations in assembly correspond to variable storage in high-level code</li>
+        </ul>
+
+        <p>The factorial calculation (5! = 120) was successfully implemented in both assembly and high-level code, with the modified version (3! = 6) demonstrating the direct correspondence between code changes.</p>
+
+        <hr>
+    </div>
+</body>
+</html>
