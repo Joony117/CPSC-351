@@ -108,11 +108,16 @@ end TCL_Generic;
     <comp lib="0" loc="(110,400)" name="Clock">
       <a name="facing" val="north"/>
     </comp>
-    <comp lib="0" loc="(1110,250)" name="Pin">
+    <comp lib="0" loc="(1120,190)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="facing" val="west"/>
       <a name="label" val="ALUControl"/>
       <a name="width" val="3"/>
+    </comp>
+    <comp lib="0" loc="(1140,80)" name="Pin">
+      <a name="appearance" val="NewPins"/>
+      <a name="facing" val="west"/>
+      <a name="label" val="Branch"/>
     </comp>
     <comp lib="0" loc="(1360,280)" name="Splitter">
       <a name="appear" val="right"/>
@@ -410,14 +415,12 @@ end TCL_Generic;
       <a name="width" val="5"/>
     </comp>
     <comp lib="0" loc="(90,360)" name="Constant"/>
-    <comp lib="0" loc="(90,480)" name="Pin">
-      <a name="appearance" val="NewPins"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="PCSrc"/>
-    </comp>
     <comp lib="0" loc="(970,590)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="ALUSrc"/>
+    </comp>
+    <comp lib="1" loc="(1000,100)" name="AND Gate">
+      <a name="facing" val="west"/>
     </comp>
     <comp lib="2" loc="(1900,360)" name="Multiplexer">
       <a name="selloc" val="tr"/>
@@ -471,9 +474,12 @@ end TCL_Generic;
     <wire from="(1010,350)" to="(1010,540)"/>
     <wire from="(1010,660)" to="(1040,660)"/>
     <wire from="(1040,660)" to="(1040,720)"/>
+    <wire from="(1050,120)" to="(1180,120)"/>
+    <wire from="(1050,80)" to="(1140,80)"/>
     <wire from="(110,380)" to="(110,400)"/>
-    <wire from="(1100,250)" to="(1100,310)"/>
-    <wire from="(1100,250)" to="(1110,250)"/>
+    <wire from="(1100,190)" to="(1100,310)"/>
+    <wire from="(1100,190)" to="(1120,190)"/>
+    <wire from="(1180,120)" to="(1180,310)"/>
     <wire from="(1230,280)" to="(1230,330)"/>
     <wire from="(1230,280)" to="(1300,280)"/>
     <wire from="(1300,240)" to="(1300,280)"/>
@@ -499,6 +505,8 @@ end TCL_Generic;
     <wire from="(200,270)" to="(220,270)"/>
     <wire from="(2010,360)" to="(2010,450)"/>
     <wire from="(240,280)" to="(300,280)"/>
+    <wire from="(260,100)" to="(1000,100)"/>
+    <wire from="(260,100)" to="(260,480)"/>
     <wire from="(270,550)" to="(290,550)"/>
     <wire from="(290,550)" to="(290,670)"/>
     <wire from="(290,670)" to="(970,670)"/>
@@ -536,7 +544,7 @@ end TCL_Generic;
     <wire from="(760,530)" to="(760,540)"/>
     <wire from="(770,630)" to="(850,630)"/>
     <wire from="(780,480)" to="(780,510)"/>
-    <wire from="(80,480)" to="(90,480)"/>
+    <wire from="(80,480)" to="(260,480)"/>
     <wire from="(850,260)" to="(850,310)"/>
     <wire from="(850,550)" to="(850,630)"/>
     <wire from="(850,550)" to="(950,550)"/>
@@ -561,6 +569,7 @@ end TCL_Generic;
     <a name="appearance" val="custom"/>
     <a name="circuit" val="Register_File"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
+    <a name="simulationFrequency" val="1.0"/>
     <appear>
       <rect fill="none" height="120" stroke="#000000" stroke-width="2" width="200" x="60" y="50"/>
       <rect height="11" stroke="none" width="4" x="178" y="40"/>
