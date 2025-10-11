@@ -415,7 +415,7 @@ end TCL_Generic;
       <a name="width" val="5"/>
     </comp>
     <comp lib="0" loc="(90,360)" name="Constant"/>
-    <comp lib="0" loc="(970,590)" name="Pin">
+    <comp lib="0" loc="(960,590)" name="Pin">
       <a name="appearance" val="NewPins"/>
       <a name="label" val="ALUSrc"/>
     </comp>
@@ -561,7 +561,7 @@ end TCL_Generic;
     <wire from="(950,650)" to="(970,650)"/>
     <wire from="(960,560)" to="(960,570)"/>
     <wire from="(960,570)" to="(980,570)"/>
-    <wire from="(970,590)" to="(980,590)"/>
+    <wire from="(960,590)" to="(980,590)"/>
     <wire from="(980,540)" to="(1010,540)"/>
     <wire from="(980,570)" to="(980,590)"/>
   </circuit>
