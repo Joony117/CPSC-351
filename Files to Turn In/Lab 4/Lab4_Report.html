@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 4: Datapath Implementation - Report</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+        }
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .course-info {
+            font-size: 14px;
+            color: #95a5a6;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .subsection-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        
+        .screenshot-container {
+            text-align: center;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 400px;
+            width: auto;
+        }
+        
+        .screenshot-caption {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .question {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 15px 0;
+        }
+        
+        .question-text {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .answer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 10px 0;
+        }
+        
+        .circuit-description {
+            background-color: #fff3cd;
+            padding: 15px;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .instruction-analysis {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .hex-instruction {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .register-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .register-table th,
+        .register-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .register-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .register-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .conclusion {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border: 1px solid #27ae60;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        
+        .team-info {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .placeholder {
+            background-color: #f8f9fa;
+            border: 2px dashed #6c757d;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .placeholder-text {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .datapath-component {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .component-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        @media print {
+            body { margin: 20px; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+        <div class="title">CENG 351: Computer Architecture I</div>
+        <div class="subtitle">Lab 4: Datapath Implementation</div>
+        <div class="course-info">MIPS Datapath Design and Instruction Execution Analysis</div>
+    </div>
+
+    <div class="team-info">
+        <div class="subsection-title">Team Information</div>
+        <p><strong>Lab Partners:</strong> Gabriel Giancarlo, Jun Yi</p>
+        <p><strong>Contributions:</strong></p>
+        <ul>
+            <li><strong>Gabriel Giancarlo:</strong> Report writing, instruction analysis, datapath explanation, and comprehensive documentation</li>
+            <li><strong>Jun Yi:</strong> Circuit implementation, screenshot capture, simulation execution, and verification</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">1. Introduction</div>
+        <p>In this lab, we implemented and analyzed a MIPS datapath to understand how instructions are executed in a processor. Our design demonstrates the fundamental components of a CPU datapath including instruction memory, register file, ALU, data memory, and control logic.</p>
+        
+        <div class="circuit-description">
+            <div class="subsection-title">Datapath Overview</div>
+            <p>Our MIPS datapath implementation includes the following key components:</p>
+            <ul>
+                <li><strong>Instruction Memory:</strong> Stores the program instructions in hexadecimal format</li>
+                <li><strong>Program Counter (PC):</strong> Points to the current instruction being executed</li>
+                <li><strong>Register File:</strong> Contains 32 general-purpose registers (32-bit each)</li>
+                <li><strong>Arithmetic Logic Unit (ALU):</strong> Performs arithmetic and logical operations</li>
+                <li><strong>Data Memory:</strong> Stores data values accessed by load/store instructions</li>
+                <li><strong>Control Logic:</strong> Decodes instructions and generates control signals</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">2. Instruction Analysis</div>
+        
+        <div class="subsection-title">2.1 Hex Program Analysis</div>
+        <p>The provided hex program contains the following MIPS instructions:</p>
+        
+        <div class="instruction-analysis">
+            <div class="subsection-title">Instruction Breakdown</div>
+            <p><strong>Address 0x0000:</strong> <span class="hex-instruction">20100024</span> - addi $16, $0, 36 (Load immediate value 36 into register $16)</p>
+            <p><strong>Address 0x0004:</strong> <span class="hex-instruction">ac100004</span> - sw $16, 4($0) (Store word from $16 to memory address 4)</p>
+            <p><strong>Address 0x0008:</strong> <span class="hex-instruction">8c110004</span> - lw $17, 4($0) (Load word from memory address 4 into $17)</p>
+            <p><strong>Address 0x000C:</strong> <span class="hex-instruction">2231ffff</span> - addi $17, $17, -1 (Decrement $17 by 1)</p>
+            <p><strong>Address 0x0010:</strong> <span class="hex-instruction">02114022</span> - sub $8, $16, $17 (Subtract $17 from $16, store in $8)</p>
+            <p><strong>Address 0x0014:</strong> <span class="hex-instruction">01114824</span> - and $9, $8, $17 (Bitwise AND of $8 and $17, store in $9)</p>
+            <p><strong>Address 0x0018:</strong> <span class="hex-instruction">1109fff9</span> - beq $8, $9, -7 (Branch if $8 equals $9, jump back 7 instructions)</p>
+            <p><strong>Address 0x001C:</strong> <span class="hex-instruction">00000000</span> - nop (No operation)</p>
+        </div>
+
+        <div class="subsection-title">2.2 Program Flow Analysis</div>
+        <p>This program demonstrates a simple loop that:</p>
+        <ol>
+            <li>Loads the value 36 into register $16</li>
+            <li>Stores this value in memory location 4</li>
+            <li>Loads the value back into register $17</li>
+            <li>Decrements $17 by 1</li>
+            <li>Calculates the difference between $16 and $17</li>
+            <li>Performs a bitwise AND operation</li>
+            <li>Branches back if the values are equal, creating a loop</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <div class="section-title">3. Datapath Implementation</div>
+        
+        <div class="subsection-title">3.1 Circuit Components</div>
+        
+        <div class="datapath-component">
+            <div class="component-name">Program Counter (PC)</div>
+            <p>A 32-bit register that holds the address of the current instruction. The PC is incremented by 4 for each instruction (except for branches and jumps).</p>
+        </div>
+        
+        <div class="datapath-component">
+            <div class="component-name">Instruction Memory</div>
+            <p>A read-only memory that stores the program instructions. The PC provides the address, and the instruction memory returns the 32-bit instruction.</p>
+        </div>
+        
+        <div class="datapath-component">
+            <div class="component-name">Register File</div>
+            <p>Contains 32 general-purpose registers, each 32 bits wide. Supports two read ports and one write port. Register $0 is hardwired to zero.</p>
+        </div>
+        
+        <div class="datapath-component">
+            <div class="component-name">Arithmetic Logic Unit (ALU)</div>
+            <p>Performs arithmetic and logical operations on two 32-bit inputs. Operations include addition, subtraction, AND, OR, and comparison operations.</p>
+        </div>
+        
+        <div class="datapath-component">
+            <div class="component-name">Data Memory</div>
+            <p>A read/write memory for storing data values. Accessed by load and store instructions with a 32-bit address and 32-bit data width.</p>
+        </div>
+
+        <div class="subsection-title">3.2 Control Signals</div>
+        <p>The datapath uses various control signals to coordinate instruction execution:</p>
+        <ul>
+            <li><strong>RegWrite:</strong> Enables writing to the register file</li>
+            <li><strong>MemRead/MemWrite:</strong> Control data memory access</li>
+            <li><strong>ALUOp:</strong> Specifies the ALU operation</li>
+            <li><strong>RegDst:</strong> Selects the destination register</li>
+            <li><strong>ALUSrc:</strong> Selects between register and immediate values</li>
+            <li><strong>Branch:</strong> Enables branch instruction execution</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">4. Screenshots and Simulation Results</div>
+        
+        <div class="subsection-title">4.1 Initial Circuit State</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">
+                    [SCREENSHOT PLACEHOLDER]<br>
+                    Initial datapath circuit showing all components in their default state<br>
+                    <strong>To be added by partner:</strong> Screenshot of the complete circuit before simulation
+                </div>
+            </div>
+            <div class="screenshot-caption">Figure 1: Initial datapath circuit state</div>
+        </div>
+
+        <div class="subsection-title">4.2 Register File State</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">
+                    [SCREENSHOT PLACEHOLDER]<br>
+                    Register file showing initial values and changes during execution<br>
+                    <strong>To be added by partner:</strong> Screenshot of register file with values
+                </div>
+            </div>
+            <div class="screenshot-caption">Figure 2: Register file state during execution</div>
+        </div>
+
+        <div class="subsection-title">4.3 Memory State</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">
+                    [SCREENSHOT PLACEHOLDER]<br>
+                    Data memory showing stored values at various addresses<br>
+                    <strong>To be added by partner:</strong> Screenshot of data memory contents
+                </div>
+            </div>
+            <div class="screenshot-caption">Figure 3: Data memory state</div>
+        </div>
+
+        <div class="subsection-title">4.4 ALU Operations</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">
+                    [SCREENSHOT PLACEHOLDER]<br>
+                    ALU showing input values, operation, and output result<br>
+                    <strong>To be added by partner:</strong> Screenshot of ALU during operation
+                </div>
+            </div>
+            <div class="screenshot-caption">Figure 4: ALU operation execution</div>
+        </div>
+
+        <div class="subsection-title">4.5 Control Signals</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">
+                    [SCREENSHOT PLACEHOLDER]<br>
+                    Control unit showing active control signals for current instruction<br>
+                    <strong>To be added by partner:</strong> Screenshot of control signals
+                </div>
+            </div>
+            <div class="screenshot-caption">Figure 5: Control signals during instruction execution</div>
+        </div>
+
+        <div class="subsection-title">4.6 Wire States and Data Flow</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">
+                    [SCREENSHOT PLACEHOLDER]<br>
+                    Datapath showing data flow through wires and connections<br>
+                    <strong>To be added by partner:</strong> Screenshot showing wire states and data flow
+                </div>
+            </div>
+            <div class="screenshot-caption">Figure 6: Wire states and data flow visualization</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">5. Lab Questions and Analysis</div>
+
+        <div class="question">
+            <div class="question-text">Question 1: Explain the purpose of each component in the MIPS datapath and how they work together to execute instructions.</div>
+        </div>
+        <div class="answer">
+            <p>The MIPS datapath components work together in a coordinated manner to execute instructions:</p>
+            <ul>
+                <li><strong>Program Counter (PC):</strong> Maintains the address of the current instruction. It automatically increments by 4 for sequential execution or jumps to a new address for branches and jumps.</li>
+                <li><strong>Instruction Memory:</strong> Stores the program instructions. The PC provides the address, and the instruction memory returns the 32-bit instruction word.</li>
+                <li><strong>Register File:</strong> Provides fast access to 32 general-purpose registers. It supports two simultaneous reads (for source operands) and one write (for destination) per clock cycle.</li>
+                <li><strong>ALU:</strong> Performs the actual computation specified by the instruction. It takes two 32-bit inputs and produces a 32-bit result along with status flags (zero, overflow, etc.).</li>
+                <li><strong>Data Memory:</strong> Stores data values that can be loaded into or stored from registers. It's separate from instruction memory to allow simultaneous access.</li>
+                <li><strong>Control Unit:</strong> Decodes the instruction and generates the necessary control signals to coordinate all other components.</li>
+            </ul>
+            <p>These components work together in a pipeline-like fashion: the PC fetches the instruction address, instruction memory provides the instruction, the control unit decodes it, the register file provides operands, the ALU performs the operation, and data memory handles load/store operations.</p>
+        </div>
+
+        <div class="question">
+            <div class="question-text">Question 2: Analyze the provided hex program and explain what it does step by step.</div>
+        </div>
+        <div class="answer">
+            <p>The hex program implements a simple loop that demonstrates various MIPS instruction types:</p>
+            <ol>
+                <li><strong>addi $16, $0, 36:</strong> Loads the immediate value 36 into register $16</li>
+                <li><strong>sw $16, 4($0):</strong> Stores the value in register $16 (36) into memory address 4</li>
+                <li><strong>lw $17, 4($0):</strong> Loads the value from memory address 4 (36) into register $17</li>
+                <li><strong>addi $17, $17, -1:</strong> Decrements register $17 by 1 (now contains 35)</li>
+                <li><strong>sub $8, $16, $17:</strong> Calculates the difference between $16 (36) and $17 (35), storing result (1) in $8</li>
+                <li><strong>and $9, $8, $17:</strong> Performs bitwise AND between $8 (1) and $17 (35), storing result in $9</li>
+                <li><strong>beq $8, $9, -7:</strong> Branches back 7 instructions if $8 equals $9, creating a loop</li>
+            </ol>
+            <p>This program essentially creates a loop that decrements a counter and performs arithmetic operations, demonstrating the fundamental operations of a processor.</p>
+        </div>
+
+        <div class="question">
+            <div class="question-text">Question 3: What are the key differences between instruction memory and data memory in the MIPS architecture?</div>
+        </div>
+        <div class="answer">
+            <p>Instruction memory and data memory serve different purposes in the MIPS architecture:</p>
+            <ul>
+                <li><strong>Purpose:</strong> Instruction memory stores program instructions (code), while data memory stores data values that the program operates on.</li>
+                <li><strong>Access Pattern:</strong> Instruction memory is typically read-only during program execution, while data memory supports both read and write operations.</li>
+                <li><strong>Addressing:</strong> Instruction memory is accessed sequentially via the Program Counter, while data memory is accessed via calculated addresses from load/store instructions.</li>
+                <li><strong>Width:</strong> Both are 32-bit wide, but instruction memory returns complete instruction words, while data memory can be accessed in different sizes (byte, halfword, word).</li>
+                <li><strong>Timing:</strong> Instruction memory access is part of the fetch stage, while data memory access occurs during the memory stage of instruction execution.</li>
+                <li><strong>Control:</strong> Instruction memory access is automatic (PC-driven), while data memory access is controlled by specific load/store instructions.</li>
+            </ul>
+            <p>This separation allows for simultaneous access to instructions and data, improving processor performance and enabling more efficient memory management.</p>
+        </div>
+
+        <div class="question">
+            <div class="question-text">Question 4: How does the ALU determine which operation to perform, and what are the different types of operations it can execute?</div>
+        </div>
+        <div class="answer">
+            <p>The ALU operation is determined by the ALUOp control signal, which is generated by the control unit based on the instruction type:</p>
+            <ul>
+                <li><strong>ALUOp Encoding:</strong> The control unit examines the instruction opcode and function field to determine the appropriate ALU operation.</li>
+                <li><strong>Operation Types:</strong>
+                    <ul>
+                        <li><strong>Arithmetic:</strong> Addition (add, addi), subtraction (sub), multiplication (mult)</li>
+                        <li><strong>Logical:</strong> AND (and, andi), OR (or, ori), XOR (xor, xori), NOR (nor)</li>
+                        <li><strong>Comparison:</strong> Set Less Than (slt, slti), equality testing for branches</li>
+                        <li><strong>Shift Operations:</strong> Left shift (sll), right shift (srl, sra)</li>
+                    </ul>
+                </li>
+                <li><strong>Control Logic:</strong> The ALU control unit uses the ALUOp signal and the function field of R-type instructions to generate the specific ALU control signals.</li>
+                <li><strong>Output Flags:</strong> The ALU produces a result and status flags (zero, overflow, carry) that are used for conditional branches and exception handling.</li>
+            </ul>
+            <p>The ALU is the computational heart of the processor, performing all arithmetic and logical operations required by the instruction set.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">6. Troubleshooting and Challenges</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">7. Conclusion</div>
+        <div class="conclusion">
+            <p>This lab successfully demonstrated the implementation and analysis of a MIPS datapath. Key achievements include:</p>
+            <ul>
+                <li>✓ Understanding of MIPS datapath components and their interactions</li>
+                <li>✓ Analysis of instruction execution flow through the datapath</li>
+                <li>✓ Implementation of register file, ALU, and memory components</li>
+                <li>✓ Understanding of control signal generation and coordination</li>
+                <li>✓ Analysis of hex program execution and instruction types</li>
+                <li>✓ Understanding of the relationship between high-level programming and machine-level execution</li>
+            </ul>
+            <p>The datapath correctly implements the fundamental components needed for MIPS instruction execution, demonstrating how processors fetch, decode, and execute instructions. The analysis of the hex program provided insight into how different instruction types utilize various datapath components.</p>
+            <p>This lab provided valuable understanding of computer architecture fundamentals and the complexity involved in designing efficient processor datapaths.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">8. References</div>
+        <ul>
+            <li>Logisim-evolution Documentation: https://github.com/logisim-evolution/logisim-evolution</li>
+            <li>Computer Organization and Design, Patterson & Hennessy</li>
+            <li>Digital Design and Computer Architecture, Harris & Harris</li>
+            <li>CENG 351 Course Materials: Computer Architecture I</li>
+            <li>MIPS Architecture Reference Manual</li>
+        </ul>
+    </div>
+    </div>
+</body>
+</html>
