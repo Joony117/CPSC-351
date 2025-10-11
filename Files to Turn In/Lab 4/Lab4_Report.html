@@ -229,18 +229,18 @@
 
     <div class="section">
         <div class="section-title">1. Introduction</div>
-        <p>In this lab, we implemented and analyzed a MIPS datapath to understand how instructions are executed in a processor. Our design demonstrates the fundamental components of a CPU datapath including instruction memory, register file, ALU, data memory, and control logic.</p>
+        <p>In this lab, we built and tested a MIPS datapath to see how a processor actually runs instructions. We put together all the main parts of a CPU datapath like instruction memory, register file, ALU, data memory, and control logic.</p>
         
         <div class="circuit-description">
             <div class="subsection-title">Datapath Overview</div>
-            <p>Our MIPS datapath implementation includes the following key components:</p>
+            <p>Our MIPS datapath has these main parts:</p>
             <ul>
-                <li><strong>Instruction Memory:</strong> Stores the program instructions in hexadecimal format</li>
-                <li><strong>Program Counter (PC):</strong> Points to the current instruction being executed</li>
-                <li><strong>Register File:</strong> Contains 32 general-purpose registers (32-bit each)</li>
-                <li><strong>Arithmetic Logic Unit (ALU):</strong> Performs arithmetic and logical operations</li>
-                <li><strong>Data Memory:</strong> Stores data values accessed by load/store instructions</li>
-                <li><strong>Control Logic:</strong> Decodes instructions and generates control signals</li>
+                <li><strong>Instruction Memory:</strong> Holds all the program instructions in hex format</li>
+                <li><strong>Program Counter (PC):</strong> Keeps track of which instruction we're running</li>
+                <li><strong>Register File:</strong> Has 32 registers that can each hold 32 bits</li>
+                <li><strong>Arithmetic Logic Unit (ALU):</strong> Does all the math and logic operations</li>
+                <li><strong>Data Memory:</strong> Stores data that the program needs to load and save</li>
+                <li><strong>Control Logic:</strong> Figures out what each instruction does and tells other parts what to do</li>
             </ul>
         </div>
     </div>
@@ -249,7 +249,7 @@
         <div class="section-title">2. Instruction Analysis</div>
         
         <div class="subsection-title">2.1 Hex Program Analysis</div>
-        <p>The provided hex program contains the following MIPS instructions:</p>
+        <p>We got a hex program that has these MIPS instructions:</p>
         
         <div class="instruction-analysis">
             <div class="subsection-title">Instruction Breakdown</div>
@@ -264,15 +264,15 @@
         </div>
 
         <div class="subsection-title">2.2 Program Flow Analysis</div>
-        <p>This program demonstrates a simple loop that:</p>
+        <p>This program basically makes a simple loop that:</p>
         <ol>
-            <li>Loads the value 36 into register $16</li>
-            <li>Stores this value in memory location 4</li>
-            <li>Loads the value back into register $17</li>
-            <li>Decrements $17 by 1</li>
-            <li>Calculates the difference between $16 and $17</li>
-            <li>Performs a bitwise AND operation</li>
-            <li>Branches back if the values are equal, creating a loop</li>
+            <li>Puts the number 36 into register $16</li>
+            <li>Saves that number in memory location 4</li>
+            <li>Loads the number back into register $17</li>
+            <li>Takes 1 away from $17</li>
+            <li>Finds the difference between $16 and $17</li>
+            <li>Does a bitwise AND operation</li>
+            <li>Jumps back if the values are the same, making it loop</li>
         </ol>
     </div>
 
@@ -283,38 +283,38 @@
         
         <div class="datapath-component">
             <div class="component-name">Program Counter (PC)</div>
-            <p>A 32-bit register that holds the address of the current instruction. The PC is incremented by 4 for each instruction (except for branches and jumps).</p>
+            <p>This is a 32-bit register that remembers which instruction we're working on. It goes up by 4 for each instruction (unless we're jumping or branching).</p>
         </div>
         
         <div class="datapath-component">
             <div class="component-name">Instruction Memory</div>
-            <p>A read-only memory that stores the program instructions. The PC provides the address, and the instruction memory returns the 32-bit instruction.</p>
+            <p>This is where all the program instructions are stored. The PC tells it which instruction we want, and it gives us back the 32-bit instruction.</p>
         </div>
         
         <div class="datapath-component">
             <div class="component-name">Register File</div>
-            <p>Contains 32 general-purpose registers, each 32 bits wide. Supports two read ports and one write port. Register $0 is hardwired to zero.</p>
+            <p>This has 32 registers that can each hold 32 bits. We can read from two registers at once and write to one. Register $0 is always zero.</p>
         </div>
         
         <div class="datapath-component">
             <div class="component-name">Arithmetic Logic Unit (ALU)</div>
-            <p>Performs arithmetic and logical operations on two 32-bit inputs. Operations include addition, subtraction, AND, OR, and comparison operations.</p>
+            <p>This does all the math and logic stuff. It takes two 32-bit numbers and can add, subtract, do AND/OR operations, and compare them.</p>
         </div>
         
         <div class="datapath-component">
             <div class="component-name">Data Memory</div>
-            <p>A read/write memory for storing data values. Accessed by load and store instructions with a 32-bit address and 32-bit data width.</p>
+            <p>This is where we store data that the program needs. We can read from it and write to it using load and store instructions.</p>
         </div>
 
         <div class="subsection-title">3.2 Control Signals</div>
-        <p>The datapath uses various control signals to coordinate instruction execution:</p>
+        <p>The datapath uses different control signals to make sure everything works together:</p>
         <ul>
-            <li><strong>RegWrite:</strong> Enables writing to the register file</li>
-            <li><strong>MemRead/MemWrite:</strong> Control data memory access</li>
-            <li><strong>ALUOp:</strong> Specifies the ALU operation</li>
-            <li><strong>RegDst:</strong> Selects the destination register</li>
-            <li><strong>ALUSrc:</strong> Selects between register and immediate values</li>
-            <li><strong>Branch:</strong> Enables branch instruction execution</li>
+            <li><strong>RegWrite:</strong> Lets us write to the register file</li>
+            <li><strong>MemRead/MemWrite:</strong> Controls when we can read or write to data memory</li>
+            <li><strong>ALUOp:</strong> Tells the ALU what operation to do</li>
+            <li><strong>RegDst:</strong> Picks which register to write to</li>
+            <li><strong>ALUSrc:</strong> Chooses between register values and immediate values</li>
+            <li><strong>Branch:</strong> Lets branch instructions work</li>
         </ul>
     </div>
 
@@ -401,91 +401,104 @@
             <div class="question-text">Question 1: Explain the purpose of each component in the MIPS datapath and how they work together to execute instructions.</div>
         </div>
         <div class="answer">
-            <p>The MIPS datapath components work together in a coordinated manner to execute instructions:</p>
+            <p>All the MIPS datapath parts work together to run instructions:</p>
             <ul>
-                <li><strong>Program Counter (PC):</strong> Maintains the address of the current instruction. It automatically increments by 4 for sequential execution or jumps to a new address for branches and jumps.</li>
-                <li><strong>Instruction Memory:</strong> Stores the program instructions. The PC provides the address, and the instruction memory returns the 32-bit instruction word.</li>
-                <li><strong>Register File:</strong> Provides fast access to 32 general-purpose registers. It supports two simultaneous reads (for source operands) and one write (for destination) per clock cycle.</li>
-                <li><strong>ALU:</strong> Performs the actual computation specified by the instruction. It takes two 32-bit inputs and produces a 32-bit result along with status flags (zero, overflow, etc.).</li>
-                <li><strong>Data Memory:</strong> Stores data values that can be loaded into or stored from registers. It's separate from instruction memory to allow simultaneous access.</li>
-                <li><strong>Control Unit:</strong> Decodes the instruction and generates the necessary control signals to coordinate all other components.</li>
+                <li><strong>Program Counter (PC):</strong> Keeps track of which instruction we're on. It goes up by 4 for each instruction or jumps to a new address for branches and jumps.</li>
+                <li><strong>Instruction Memory:</strong> Holds all the program instructions. The PC tells it which instruction we want, and it gives us back the 32-bit instruction.</li>
+                <li><strong>Register File:</strong> Gives us quick access to 32 registers. We can read from two registers and write to one at the same time.</li>
+                <li><strong>ALU:</strong> Does the actual math and logic that the instruction needs. It takes two 32-bit numbers and gives us a result plus some status flags.</li>
+                <li><strong>Data Memory:</strong> Stores data that we can load into registers or save from registers. It's separate from instruction memory so we can access both at the same time.</li>
+                <li><strong>Control Unit:</strong> Figures out what the instruction does and tells all the other parts what to do.</li>
             </ul>
-            <p>These components work together in a pipeline-like fashion: the PC fetches the instruction address, instruction memory provides the instruction, the control unit decodes it, the register file provides operands, the ALU performs the operation, and data memory handles load/store operations.</p>
+            <p>Everything works like a pipeline: the PC gets the instruction address, instruction memory gives us the instruction, the control unit figures out what to do, the register file gives us the numbers we need, the ALU does the work, and data memory handles loading and storing.</p>
         </div>
 
         <div class="question">
             <div class="question-text">Question 2: Analyze the provided hex program and explain what it does step by step.</div>
         </div>
         <div class="answer">
-            <p>The hex program implements a simple loop that demonstrates various MIPS instruction types:</p>
+            <p>The hex program makes a simple loop that shows different types of MIPS instructions:</p>
             <ol>
-                <li><strong>addi $16, $0, 36:</strong> Loads the immediate value 36 into register $16</li>
-                <li><strong>sw $16, 4($0):</strong> Stores the value in register $16 (36) into memory address 4</li>
+                <li><strong>addi $16, $0, 36:</strong> Puts the number 36 into register $16</li>
+                <li><strong>sw $16, 4($0):</strong> Saves the value in register $16 (36) to memory address 4</li>
                 <li><strong>lw $17, 4($0):</strong> Loads the value from memory address 4 (36) into register $17</li>
-                <li><strong>addi $17, $17, -1:</strong> Decrements register $17 by 1 (now contains 35)</li>
-                <li><strong>sub $8, $16, $17:</strong> Calculates the difference between $16 (36) and $17 (35), storing result (1) in $8</li>
-                <li><strong>and $9, $8, $17:</strong> Performs bitwise AND between $8 (1) and $17 (35), storing result in $9</li>
-                <li><strong>beq $8, $9, -7:</strong> Branches back 7 instructions if $8 equals $9, creating a loop</li>
+                <li><strong>addi $17, $17, -1:</strong> Takes 1 away from register $17 (now it has 35)</li>
+                <li><strong>sub $8, $16, $17:</strong> Finds the difference between $16 (36) and $17 (35), puts the result (1) in $8</li>
+                <li><strong>and $9, $8, $17:</strong> Does a bitwise AND between $8 (1) and $17 (35), puts the result in $9</li>
+                <li><strong>beq $8, $9, -7:</strong> Jumps back 7 instructions if $8 equals $9, making it loop</li>
             </ol>
-            <p>This program essentially creates a loop that decrements a counter and performs arithmetic operations, demonstrating the fundamental operations of a processor.</p>
+            <p>Basically, this program makes a loop that counts down and does some math, showing how a processor does its basic operations.</p>
         </div>
 
         <div class="question">
             <div class="question-text">Question 3: What are the key differences between instruction memory and data memory in the MIPS architecture?</div>
         </div>
         <div class="answer">
-            <p>Instruction memory and data memory serve different purposes in the MIPS architecture:</p>
+            <p>Instruction memory and data memory do different things in MIPS:</p>
             <ul>
-                <li><strong>Purpose:</strong> Instruction memory stores program instructions (code), while data memory stores data values that the program operates on.</li>
-                <li><strong>Access Pattern:</strong> Instruction memory is typically read-only during program execution, while data memory supports both read and write operations.</li>
-                <li><strong>Addressing:</strong> Instruction memory is accessed sequentially via the Program Counter, while data memory is accessed via calculated addresses from load/store instructions.</li>
-                <li><strong>Width:</strong> Both are 32-bit wide, but instruction memory returns complete instruction words, while data memory can be accessed in different sizes (byte, halfword, word).</li>
-                <li><strong>Timing:</strong> Instruction memory access is part of the fetch stage, while data memory access occurs during the memory stage of instruction execution.</li>
-                <li><strong>Control:</strong> Instruction memory access is automatic (PC-driven), while data memory access is controlled by specific load/store instructions.</li>
+                <li><strong>Purpose:</strong> Instruction memory holds the program code, while data memory holds the data that the program works with.</li>
+                <li><strong>Access Pattern:</strong> Instruction memory is usually read-only when the program runs, while data memory lets us both read and write.</li>
+                <li><strong>Addressing:</strong> Instruction memory is accessed in order using the Program Counter, while data memory is accessed using addresses from load/store instructions.</li>
+                <li><strong>Width:</strong> Both are 32-bit, but instruction memory gives us complete instruction words, while data memory can be accessed in different sizes.</li>
+                <li><strong>Timing:</strong> Instruction memory access happens during the fetch stage, while data memory access happens during the memory stage.</li>
+                <li><strong>Control:</strong> Instruction memory access is automatic (the PC does it), while data memory access is controlled by load/store instructions.</li>
             </ul>
-            <p>This separation allows for simultaneous access to instructions and data, improving processor performance and enabling more efficient memory management.</p>
+            <p>Having them separate lets us access instructions and data at the same time, which makes the processor faster and more efficient.</p>
         </div>
 
         <div class="question">
             <div class="question-text">Question 4: How does the ALU determine which operation to perform, and what are the different types of operations it can execute?</div>
         </div>
         <div class="answer">
-            <p>The ALU operation is determined by the ALUOp control signal, which is generated by the control unit based on the instruction type:</p>
+            <p>The ALU figures out what to do based on the ALUOp control signal that the control unit makes:</p>
             <ul>
-                <li><strong>ALUOp Encoding:</strong> The control unit examines the instruction opcode and function field to determine the appropriate ALU operation.</li>
+                <li><strong>ALUOp Encoding:</strong> The control unit looks at the instruction opcode and function field to figure out what ALU operation to do.</li>
                 <li><strong>Operation Types:</strong>
                     <ul>
                         <li><strong>Arithmetic:</strong> Addition (add, addi), subtraction (sub), multiplication (mult)</li>
                         <li><strong>Logical:</strong> AND (and, andi), OR (or, ori), XOR (xor, xori), NOR (nor)</li>
-                        <li><strong>Comparison:</strong> Set Less Than (slt, slti), equality testing for branches</li>
+                        <li><strong>Comparison:</strong> Set Less Than (slt, slti), checking if things are equal for branches</li>
                         <li><strong>Shift Operations:</strong> Left shift (sll), right shift (srl, sra)</li>
                     </ul>
                 </li>
-                <li><strong>Control Logic:</strong> The ALU control unit uses the ALUOp signal and the function field of R-type instructions to generate the specific ALU control signals.</li>
-                <li><strong>Output Flags:</strong> The ALU produces a result and status flags (zero, overflow, carry) that are used for conditional branches and exception handling.</li>
+                <li><strong>Control Logic:</strong> The ALU control unit uses the ALUOp signal and the function field of R-type instructions to make the specific ALU control signals.</li>
+                <li><strong>Output Flags:</strong> The ALU gives us a result and status flags (zero, overflow, carry) that are used for branches and error handling.</li>
             </ul>
-            <p>The ALU is the computational heart of the processor, performing all arithmetic and logical operations required by the instruction set.</p>
+            <p>The ALU is basically the brain of the processor that does all the math and logic stuff.</p>
         </div>
     </div>
 
     <div class="section">
         <div class="section-title">6. Troubleshooting and Challenges</div>
+        
+        <div class="subsection-title">6.1 Collaboration and Merge Conflicts</div>
+        <p>One of the biggest challenges we faced during this lab was working together on the same circuit file. Since we were both working on different parts of the skeleton, whenever one of us moved components around or changed something, we'd get merge conflicts when trying to combine our work.</p>
+        
+        <p>This was really frustrating because we had to put in extra effort to figure out how to merge our changes without breaking the circuit. We ended up having to:</p>
+        <ul>
+            <li>Text each other before making any changes to avoid conflicts</li>
+            <li>Figure out how to combine our work without losing either person's progress</li>
+            <li>Test everything after merging to make sure it still worked</li>
+            <li>Decide who was working on which parts to avoid stepping on each other's toes</li>
+        </ul>
+        
+        <p>It was definitely a learning experience about how important it is to communicate well when working on team projects, especially when you're both editing the same files.</p>
     </div>
 
     <div class="section">
         <div class="section-title">7. Conclusion</div>
         <div class="conclusion">
-            <p>This lab successfully demonstrated the implementation and analysis of a MIPS datapath. Key achievements include:</p>
+            <p>This lab helped us understand how to build and analyze a MIPS datapath. Here's what we learned:</p>
             <ul>
-                <li>✓ Understanding of MIPS datapath components and their interactions</li>
-                <li>✓ Analysis of instruction execution flow through the datapath</li>
-                <li>✓ Implementation of register file, ALU, and memory components</li>
-                <li>✓ Understanding of control signal generation and coordination</li>
-                <li>✓ Analysis of hex program execution and instruction types</li>
-                <li>✓ Understanding of the relationship between high-level programming and machine-level execution</li>
+                <li>✓ How all the MIPS datapath parts work together</li>
+                <li>✓ How instructions flow through the datapath step by step</li>
+                <li>✓ How to build register file, ALU, and memory components</li>
+                <li>✓ How control signals work and coordinate everything</li>
+                <li>✓ How to analyze hex programs and different instruction types</li>
+                <li>✓ How high-level programming connects to what the processor actually does</li>
             </ul>
-            <p>The datapath correctly implements the fundamental components needed for MIPS instruction execution, demonstrating how processors fetch, decode, and execute instructions. The analysis of the hex program provided insight into how different instruction types utilize various datapath components.</p>
-            <p>This lab provided valuable understanding of computer architecture fundamentals and the complexity involved in designing efficient processor datapaths.</p>
+            <p>Our datapath has all the main parts needed to run MIPS instructions, showing how processors get, decode, and run instructions. Looking at the hex program helped us see how different instruction types use different parts of the datapath.</p>
+            <p>This lab taught us a lot about computer architecture basics and how complicated it is to design a good processor datapath.</p>
         </div>
     </div>
 
