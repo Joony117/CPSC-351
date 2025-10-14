@@ -412,6 +412,7 @@ end TCL_Generic;
     </comp>
     <comp lib="0" loc="(860,650)" name="Pin">
       <a name="appearance" val="NewPins"/>
+      <a name="initial" val="0x2"/>
       <a name="width" val="5"/>
     </comp>
     <comp lib="0" loc="(90,360)" name="Constant"/>
