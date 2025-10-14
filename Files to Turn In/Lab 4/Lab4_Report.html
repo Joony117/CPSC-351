@@ -327,111 +327,66 @@
             <div class="screenshot-caption">Figure 1: Initial datapath circuit state</div>
         </div>
 
-        <div class="subsection-title">4.2 ADDI Instruction Execution</div>
+        <div class="subsection-title">4.2 Instruction #1: ADDI Instruction Execution</div>
         <div class="screenshot-container">
-            <img src="Screenshots lab 4/addi.png" alt="ADDI instruction execution showing immediate value loading" class="screenshot">
+            <img src="Screenshots lab 4/ins_1_addi.png" alt="ADDI instruction execution showing immediate value loading" class="screenshot">
             <div class="screenshot-caption">Figure 2: ADDI instruction execution (addi $16, $0, 36)</div>
         </div>
 
-        <div class="subsection-title">4.3 Load Word Control Signals</div>
+        <div class="subsection-title">4.3 Instruction #2: Save Word Control Signals</div>
         <div class="screenshot-container">
-            <img src="Screenshots lab 4/LWcontrolSignals.png" alt="Load word instruction control signals" class="screenshot">
-            <div class="screenshot-caption">Figure 3: Load word control signals (lw $17, 4($0))</div>
+            <img src="Screenshots lab 4/ins_2_SW.png" alt="Save word instruction control signals" class="screenshot">
+            <div class="screenshot-caption">Figure 3: Save word control signals (sw $s0, 4($0))</div>
         </div>
 
-        <div class="subsection-title">4.4 SUB Instruction Execution</div>
+        <div class="subsection-title">4.4 Instruction #3: Load Word Control Signals</div>
         <div class="screenshot-container">
-            <img src="Screenshots lab 4/sub.png" alt="SUB instruction execution showing subtraction operation" class="screenshot">
-            <div class="screenshot-caption">Figure 4: SUB instruction execution (sub $8, $16, $17)</div>
+            <img src="Screenshots lab 4/ins_3_LW.png" alt="Load word instruction control signals" class="screenshot">
+            <div class="screenshot-caption">Figure 4: Load word control signals (lw $17, 4($0))</div>
         </div>
 
-        <div class="subsection-title">4.5 AND Instruction Execution</div>
+        <div class="subsection-title">4.4 Instruction #4: ADDI Instruction Execution</div>
         <div class="screenshot-container">
-            <img src="Screenshots lab 4/AND.png" alt="AND instruction execution showing bitwise AND operation" class="screenshot">
-            <div class="screenshot-caption">Figure 5: AND instruction execution (and $9, $8, $17)</div>
+            <img src="Screenshots lab 4/ins4_addi.png" alt="ADDI instruction execution showing immediate value loading" class="screenshot">
+            <div class="screenshot-caption">Figure 5: ADDI Instruction Execution (addi $17, $17, -1)</div>
         </div>
 
-        <div class="subsection-title">4.6 BEQ Instruction Execution</div>
+        <div class="subsection-title">4.5 Instruction #5: SUB Instruction Execution</div>
         <div class="screenshot-container">
-            <img src="Screenshots lab 4/beq.png" alt="BEQ instruction execution showing branch equal operation" class="screenshot">
-            <div class="screenshot-caption">Figure 6: BEQ instruction execution (beq $8, $9, -7)</div>
+            <img src="Screenshots lab 4/ins5_sub.png" alt="SUB instruction execution showing subtraction operation" class="screenshot">
+            <div class="screenshot-caption">Figure 6: SUB instruction execution (sub $8, $16, $17)</div>
+        </div>
+
+        <div class="subsection-title">4.6 Instruction #6: AND Instruction Execution</div>
+        <div class="screenshot-container">
+            <img src="Screenshots lab 4/ins6_and.png" alt="AND instruction execution showing bitwise AND operation" class="screenshot">
+            <div class="screenshot-caption">Figure 7: AND instruction execution (and $9, $8, $17)</div>
+        </div>
+
+        <div class="subsection-title">4.7 Instruction #7: BEQ Instruction Execution</div>
+        <div class="screenshot-container">
+            <img src="Screenshots lab 4/ins7_beq.png" alt="BEQ instruction execution showing branch equal operation" class="screenshot">
+            <div class="screenshot-caption">Figure 8: BEQ instruction execution (beq $8, $9, -7)</div>
         </div>
     </div>
 
     <div class="section">
         <div class="section-title">5. Lab Questions and Analysis</div>
-
+      
         <div class="question">
-            <div class="question-text">Question 1: Explain the purpose of each component in the MIPS datapath and how they work together to execute instructions.</div>
+          <div class="question-text">Question 1: Why did we use ROM for instruction memory and RAM for data memory?</div>
         </div>
         <div class="answer">
-            <p>All the MIPS datapath parts work together to run instructions:</p>
-            <ul>
-                <li><strong>Program Counter (PC):</strong> Keeps track of which instruction we're on. It goes up by 4 for each instruction or jumps to a new address for branches and jumps.</li>
-                <li><strong>Instruction Memory:</strong> Holds all the program instructions. The PC tells it which instruction we want, and it gives us back the 32-bit instruction.</li>
-                <li><strong>Register File:</strong> Gives us quick access to 32 registers. We can read from two registers and write to one at the same time.</li>
-                <li><strong>ALU:</strong> Does the actual math and logic that the instruction needs. It takes two 32-bit numbers and gives us a result plus some status flags.</li>
-                <li><strong>Data Memory:</strong> Stores data that we can load into registers or save from registers. It's separate from instruction memory so we can access both at the same time.</li>
-                <li><strong>Control Unit:</strong> Figures out what the instruction does and tells all the other parts what to do.</li>
-            </ul>
-            <p>Everything works like a pipeline: the PC gets the instruction address, instruction memory gives us the instruction, the control unit figures out what to do, the register file gives us the numbers we need, the ALU does the work, and data memory handles loading and storing.</p>
+          <p><strong>Short answer:</strong> Instruction memory is a <em>ROM</em> in this lab because the program contents are fixed during simulation — we only read instructions. Data memory is a <em>RAM</em> because the program must <strong>load</strong> from and <strong>store</strong> to it during execution. </p>
         </div>
-
+      
         <div class="question">
-            <div class="question-text">Question 2: Analyze the provided hex program and explain what it does step by step.</div>
+          <div class="question-text">Question 2: For instructions that write to memory or the register file, when does the processor actually write those values to memory? Why?.</div>
         </div>
         <div class="answer">
-            <p>The hex program makes a simple loop that shows different types of MIPS instructions:</p>
-            <ol>
-                <li><strong>addi $16, $0, 36:</strong> Puts the number 36 into register $16</li>
-                <li><strong>sw $16, 4($0):</strong> Saves the value in register $16 (36) to memory address 4</li>
-                <li><strong>lw $17, 4($0):</strong> Loads the value from memory address 4 (36) into register $17</li>
-                <li><strong>addi $17, $17, -1:</strong> Takes 1 away from register $17 (now it has 35)</li>
-                <li><strong>sub $8, $16, $17:</strong> Finds the difference between $16 (36) and $17 (35), puts the result (1) in $8</li>
-                <li><strong>and $9, $8, $17:</strong> Does a bitwise AND between $8 (1) and $17 (35), puts the result in $9</li>
-                <li><strong>beq $8, $9, -7:</strong> Jumps back 7 instructions if $8 equals $9, making it loop</li>
-            </ol>
-            <p>Basically, this program makes a loop that counts down and does some math, showing how a processor does its basic operations.</p>
+          <p><strong>Short answer:</strong> In the single-cycle datapath, writes happen at the <strong>clock edge</strong> of the cycle in which the instruction executes: <code>MemWrite</code> causes the data memory to commit on the clock tick for <code>sw</code>, and <code>RegWrite</code> commits to the register file on the same tick for instructions that write a register (e.g., <code>addi</code>, <code>lw</code>, R-type). This ensures all combinational paths settle before state updates. </p>
         </div>
-
-        <div class="question">
-            <div class="question-text">Question 3: What are the key differences between instruction memory and data memory in the MIPS architecture?</div>
-        </div>
-        <div class="answer">
-            <p>Instruction memory and data memory do different things in MIPS:</p>
-            <ul>
-                <li><strong>Purpose:</strong> Instruction memory holds the program code, while data memory holds the data that the program works with.</li>
-                <li><strong>Access Pattern:</strong> Instruction memory is usually read-only when the program runs, while data memory lets us both read and write.</li>
-                <li><strong>Addressing:</strong> Instruction memory is accessed in order using the Program Counter, while data memory is accessed using addresses from load/store instructions.</li>
-                <li><strong>Width:</strong> Both are 32-bit, but instruction memory gives us complete instruction words, while data memory can be accessed in different sizes.</li>
-                <li><strong>Timing:</strong> Instruction memory access happens during the fetch stage, while data memory access happens during the memory stage.</li>
-                <li><strong>Control:</strong> Instruction memory access is automatic (the PC does it), while data memory access is controlled by load/store instructions.</li>
-            </ul>
-            <p>Having them separate lets us access instructions and data at the same time, which makes the processor faster and more efficient.</p>
-        </div>
-
-        <div class="question">
-            <div class="question-text">Question 4: How does the ALU determine which operation to perform, and what are the different types of operations it can execute?</div>
-        </div>
-        <div class="answer">
-            <p>The ALU figures out what to do based on the ALUOp control signal that the control unit makes:</p>
-            <ul>
-                <li><strong>ALUOp Encoding:</strong> The control unit looks at the instruction opcode and function field to figure out what ALU operation to do.</li>
-                <li><strong>Operation Types:</strong>
-                    <ul>
-                        <li><strong>Arithmetic:</strong> Addition (add, addi), subtraction (sub), multiplication (mult)</li>
-                        <li><strong>Logical:</strong> AND (and, andi), OR (or, ori), XOR (xor, xori), NOR (nor)</li>
-                        <li><strong>Comparison:</strong> Set Less Than (slt, slti), checking if things are equal for branches</li>
-                        <li><strong>Shift Operations:</strong> Left shift (sll), right shift (srl, sra)</li>
-                    </ul>
-                </li>
-                <li><strong>Control Logic:</strong> The ALU control unit uses the ALUOp signal and the function field of R-type instructions to make the specific ALU control signals.</li>
-                <li><strong>Output Flags:</strong> The ALU gives us a result and status flags (zero, overflow, carry) that are used for branches and error handling.</li>
-            </ul>
-            <p>The ALU is basically the brain of the processor that does all the math and logic stuff.</p>
-        </div>
-    </div>
-
+      </div>
     <div class="section">
         <div class="section-title">6. Troubleshooting and Challenges</div>
         
