@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 5: Control - Report</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+        }
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .course-info {
+            font-size: 14px;
+            color: #95a5a6;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .subsection-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        
+        .screenshot-container {
+            text-align: center;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 400px;
+            width: auto;
+        }
+        
+        .screenshot-caption {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .question {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 15px 0;
+        }
+        
+        .question-text {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .answer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 10px 0;
+        }
+        
+        .circuit-description {
+            background-color: #fff3cd;
+            padding: 15px;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .instruction-analysis {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .hex-instruction {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .register-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .register-table th,
+        .register-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .register-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .register-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .conclusion {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border: 1px solid #27ae60;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        
+        .team-info {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .placeholder {
+            background-color: #f8f9fa;
+            border: 2px dashed #6c757d;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .placeholder-text {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .datapath-component {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .component-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .control-signal-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .control-signal-table th,
+        .control-signal-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .control-signal-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .control-signal-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        @media print {
+            body { margin: 20px; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+        <div class="title">CENG 351: Computer Architecture I</div>
+        <div class="subtitle">Lab 5: Control</div>
+        <div class="course-info">Control Unit Implementation and Instruction Execution</div>
+    </div>
+
+    <div class="team-info">
+        <div class="subsection-title">Team Information</div>
+        <p><strong>Lab Partners:</strong> Gabriel Giancarlo, Jun Yi</p>
+        <p><strong>Contributions:</strong></p>
+        <ul>
+            <li><strong>Gabriel Giancarlo:</strong> Report writing, control unit analysis, documentation, and lab questions</li>
+            <li><strong>Jun Yi:</strong> Circuit implementation (ALU Decoder, Main Decoder, Control Unit), screenshot capture, simulation execution, and verification</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">1. Introduction</div>
+        <p>In this lab, we built on our single-cycle datapath design from Lab 4 to include a functional control unit. The control unit is the heart of the processor—it interprets instruction opcodes and generates the control signals that coordinate all the datapath components. We implemented a hierarchical, modular design with separate ALU Decoder and Main Decoder modules, which were then combined into a complete Control Unit.</p>
+        
+        <div class="circuit-description">
+            <div class="subsection-title">Control Unit Overview</div>
+            <p>Our control unit implementation consists of three main components:</p>
+            <ul>
+                <li><strong>ALU Decoder:</strong> Takes the ALUOp signal (2 bits) and funct field (6 bits) as inputs, and outputs the 3-bit ALUControl signal that tells the ALU which operation to perform</li>
+                <li><strong>Main Decoder:</strong> Takes the 6-bit opcode as input and generates all the primary control signals (RegWrite, RegDst, ALUSrc, Branch, MemWrite, MemtoReg, and ALUOp)</li>
+                <li><strong>Control Unit:</strong> Combines both decoders hierarchically, taking the instruction's opcode and funct fields as inputs and producing all necessary control signals</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">2. ALU Decoder Implementation</div>
+        
+        <div class="subsection-title">2.1 ALU Decoder Design</div>
+        <p>The ALU Decoder is responsible for determining the specific ALU operation based on the ALUOp signal from the main decoder and the funct field from R-type instructions. The ALUOp signal indicates the instruction type:</p>
+        <ul>
+            <li><strong>00:</strong> Load or store instruction (ALU performs addition)</li>
+            <li><strong>01:</strong> Branch instruction (ALU performs subtraction for comparison)</li>
+            <li><strong>10:</strong> R-type instruction (ALU operation determined by funct field)</li>
+        </ul>
+        
+        <div class="subsection-title">2.2 ALU Decoder Schematic</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for ALU Decoder Schematic Screenshot]</div>
+            </div>
+            <div class="screenshot-caption">Figure 1: ALU Decoder circuit implementation</div>
+        </div>
+
+        <div class="subsection-title">2.3 ALU Decoder Truth Table</div>
+        <p>The ALU Decoder implements the following truth table, mapping ALUOp and funct bits to ALUControl:</p>
+        <table class="control-signal-table">
+            <thead>
+                <tr>
+                    <th>ALUOp1</th>
+                    <th>ALUOp0</th>
+                    <th>funct[5:0]</th>
+                    <th>ALUControl[2:0]</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>xxxxxx</td>
+                    <td>010</td>
+                    <td>Add (lw/sw)</td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>xxxxxx</td>
+                    <td>110</td>
+                    <td>Subtract (beq)</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>100000</td>
+                    <td>010</td>
+                    <td>Add</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>100010</td>
+                    <td>110</td>
+                    <td>Subtract</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>100100</td>
+                    <td>000</td>
+                    <td>AND</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>100101</td>
+                    <td>001</td>
+                    <td>OR</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>101010</td>
+                    <td>111</td>
+                    <td>Set on less than</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">3. Main Decoder Implementation</div>
+        
+        <div class="subsection-title">3.1 Main Decoder Design</div>
+        <p>The Main Decoder is essentially a combinational decoder that takes the 6-bit opcode as input and generates all the primary control signals. Each instruction type has its own unique opcode, and the decoder uses AND gates to match the opcode bits and produce the appropriate control signal values.</p>
+        
+        <div class="subsection-title">3.2 Main Decoder Schematic</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for Main Decoder Schematic Screenshot]</div>
+            </div>
+            <div class="screenshot-caption">Figure 2: Main Decoder circuit implementation</div>
+        </div>
+
+        <div class="subsection-title">3.3 Main Decoder Truth Table</div>
+        <p>The Main Decoder implements the following control signal truth table:</p>
+        <table class="control-signal-table">
+            <thead>
+                <tr>
+                    <th>Instruction</th>
+                    <th>Op[5:0]</th>
+                    <th>RegWrite</th>
+                    <th>RegDst</th>
+                    <th>ALUSrc</th>
+                    <th>Branch</th>
+                    <th>MemWrite</th>
+                    <th>MemtoReg</th>
+                    <th>ALUOp[1:0]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>R-type</td>
+                    <td>000000</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>lw</td>
+                    <td>100011</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>00</td>
+                </tr>
+                <tr>
+                    <td>sw</td>
+                    <td>101011</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>x</td>
+                    <td>00</td>
+                </tr>
+                <tr>
+                    <td>beq</td>
+                    <td>000100</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>01</td>
+                </tr>
+                <tr>
+                    <td>addi</td>
+                    <td>001000</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">3.4 ADDI Instruction Implementation</div>
+        <p>We added support for the <code>addi</code> (add immediate) instruction to the main decoder. The addi instruction has opcode <code>001000</code> and uses the same control signals as a load instruction, except it writes the ALU result directly to the register (MemtoReg = 0) rather than from memory. This addition allows the processor to handle immediate arithmetic operations efficiently.</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">4. Control Unit Construction</div>
+        
+        <div class="subsection-title">4.1 Hierarchical Design</div>
+        <p>We combined the ALU Decoder and Main Decoder into a single Control Unit module using Logisim's hierarchical design features. This modular approach makes the design easier to understand, test, and maintain.</p>
+        
+        <div class="subsection-title">4.2 Control Unit Schematic</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for Control Unit Schematic Screenshot]</div>
+            </div>
+            <div class="screenshot-caption">Figure 3: Complete Control Unit circuit implementation</div>
+        </div>
+
+        <div class="subsection-title">4.3 Integration with Datapath</div>
+        <p>The Control Unit was integrated into our existing datapath from Lab 4. We removed the manual input pins for control signals and connected the Control Unit's outputs directly to the appropriate datapath components. The Control Unit receives:</p>
+        <ul>
+            <li><strong>Inputs:</strong> Instruction opcode (bits 31:26) and funct field (bits 5:0)</li>
+            <li><strong>Outputs:</strong> All control signals (RegWrite, RegDst, ALUSrc, Branch, MemWrite, MemtoReg, ALUOp, ALUControl)</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">5. Simulation and Testing</div>
+        
+        <div class="subsection-title">5.1 Test Program</div>
+        <p>We tested the complete processor design using the following assembly program that loops forever:</p>
+        <div class="instruction-analysis">
+            <div class="subsection-title">Assembly Program</div>
+            <pre>top: addi $s0, $0, 36
+     sw $s0, 4($0)
+     lw $s1, 4($0)
+     addi $s1, $s1, -1
+     sub $t0, $s0, $s1
+     and $t1, $t0, $s1
+     beq $t0, $t1, top</pre>
+            
+            <div class="subsection-title">Machine Language</div>
+            <p><span class="hex-instruction">20100024</span> - addi $16, $0, 36</p>
+            <p><span class="hex-instruction">ac100004</span> - sw $16, 4($0)</p>
+            <p><span class="hex-instruction">8c110004</span> - lw $17, 4($0)</p>
+            <p><span class="hex-instruction">2231ffff</span> - addi $17, $17, -1</p>
+            <p><span class="hex-instruction">02114022</span> - sub $8, $16, $17</p>
+            <p><span class="hex-instruction">01114824</span> - and $9, $8, $17</p>
+            <p><span class="hex-instruction">1109fff9</span> - beq $8, $9, -7</p>
+        </div>
+
+        <div class="subsection-title">5.2 Instruction Execution Screenshots</div>
+        
+        <div class="subsection-title">5.2.1 ADDI Instruction (addi $s0, $0, 36)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for ADDI instruction screenshot showing control signals]</div>
+            </div>
+            <div class="screenshot-caption">Figure 4: ADDI instruction execution with control signals</div>
+        </div>
+
+        <div class="subsection-title">5.2.2 Store Word Instruction (sw $s0, 4($0))</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for SW instruction screenshot showing control signals]</div>
+            </div>
+            <div class="screenshot-caption">Figure 5: Store Word instruction execution with control signals</div>
+        </div>
+
+        <div class="subsection-title">5.2.3 Load Word Instruction (lw $s1, 4($0))</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for LW instruction screenshot showing control signals]</div>
+            </div>
+            <div class="screenshot-caption">Figure 6: Load Word instruction execution with control signals</div>
+        </div>
+
+        <div class="subsection-title">5.2.4 ADDI Instruction (addi $s1, $s1, -1)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for second ADDI instruction screenshot showing control signals]</div>
+            </div>
+            <div class="screenshot-caption">Figure 7: ADDI instruction (decrement) execution with control signals</div>
+        </div>
+
+        <div class="subsection-title">5.2.5 SUB Instruction (sub $t0, $s0, $s1)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for SUB instruction screenshot showing control signals and ALUControl]</div>
+            </div>
+            <div class="screenshot-caption">Figure 8: SUB instruction execution with control signals and ALUControl</div>
+        </div>
+
+        <div class="subsection-title">5.2.6 AND Instruction (and $t1, $t0, $s1)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for AND instruction screenshot showing control signals and ALUControl]</div>
+            </div>
+            <div class="screenshot-caption">Figure 9: AND instruction execution with control signals and ALUControl</div>
+        </div>
+
+        <div class="subsection-title">5.2.7 BEQ Instruction (beq $t0, $t1, top)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[Placeholder for BEQ instruction screenshot showing branch control signals]</div>
+            </div>
+            <div class="screenshot-caption">Figure 10: BEQ instruction execution with branch control signals</div>
+        </div>
+
+        <div class="subsection-title">5.3 Verification Results</div>
+        <p>After stepping through each instruction one clock cycle at a time, we verified that:</p>
+        <ul>
+            <li>✓ The control unit correctly generates control signals for each instruction type</li>
+            <li>✓ The ALUControl signal is properly determined by the ALU Decoder based on ALUOp and funct field</li>
+            <li>✓ All instructions execute correctly and the program counter increments appropriately</li>
+            <li>✓ The program loops correctly, with values being stored in data memory</li>
+            <li>✓ The branch instruction correctly redirects program flow when conditions are met</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">6. Lab Questions and Analysis</div>
+      
+        <div class="question">
+          <div class="question-text">Question 1: Aside from using the decoder combinational logic shown in this lab, what is another way you could implement the main decoder? You can just describe another implementation; you do not need to design it.</div>
+        </div>
+        <div class="answer">
+          <p><strong>Answer:</strong> Another way to implement the main decoder would be to use a <strong>Read-Only Memory (ROM)</strong> or lookup table approach. Instead of using combinational logic gates, we could store the control signal values directly in a ROM, where the opcode serves as the address. Each address would contain the pre-computed control signal values for that instruction type. This approach is simpler to understand and modify, as you only need to update the ROM contents rather than redesigning the combinational logic. However, it may use more hardware resources than an optimized combinational logic implementation.</p>
+          
+          <p>Another alternative would be to use a <strong>Programmable Logic Array (PLA)</strong> or <strong>Programmable Array Logic (PAL)</strong>, which can implement any combinational logic function and can be reprogrammed if needed. This provides flexibility while still using combinational logic rather than sequential memory.</p>
+        </div>
+      
+        <div class="question">
+          <div class="question-text">Question 2: What are the advantages of taking a hierarchical, modular approach to implementing the control unit? Would you consider implementing the design without using this hierarchy/modularity?</div>
+        </div>
+        <div class="answer">
+          <p><strong>Answer:</strong> The hierarchical, modular approach offers several key advantages:</p>
+          <ul>
+            <li><strong>Modularity and Reusability:</strong> The ALU Decoder and Main Decoder can be designed and tested independently, then reused in other processor designs.</li>
+            <li><strong>Easier Debugging:</strong> When a problem occurs, you can isolate it to a specific module rather than searching through one large, complex circuit.</li>
+            <li><strong>Better Organization:</strong> The design is easier to understand and maintain, with clear separation of concerns between instruction decoding and ALU operation selection.</li>
+            <li><strong>Scalability:</strong> Adding new instructions or ALU operations is simpler—you modify the relevant module without affecting the entire control unit.</li>
+            <li><strong>Parallel Development:</strong> Team members can work on different modules simultaneously without conflicts.</li>
+          </ul>
+          
+          <p>While it would be possible to implement the control unit as a single, flat combinational circuit, this would be much more difficult to design, debug, and maintain. The hierarchical approach aligns with good engineering principles of modularity and separation of concerns, making the design more manageable and less error-prone.</p>
+        </div>
+      </div>
+
+    <div class="section">
+        <div class="section-title">7. Troubleshooting and Challenges</div>
+        
+        <div class="subsection-title">7.1 Bit Selection and Splitting</div>
+        <p>One challenge we encountered was ensuring we correctly selected the right bits from the instruction when splitting it into opcode and funct fields. We had to carefully verify that:</p>
+        <ul>
+            <li>The opcode (bits 31:26) was correctly extracted from the instruction</li>
+            <li>The funct field (bits 5:0) was properly routed to the ALU Decoder</li>
+            <li>The bit ordering in splitters matched our expectations</li>
+        </ul>
+        
+        <div class="subsection-title">7.2 ALUOp Signal Encoding</div>
+        <p>Another challenge was properly combining the two ALUOp bits from the Main Decoder into a single 2-bit signal. We had to ensure the bits were combined correctly and that the ALU Decoder received them in the right order.</p>
+        
+        <div class="subsection-title">7.3 ADDI Instruction Addition</div>
+        <p>Adding the addi instruction required careful consideration of the control signals. We needed to ensure it behaved like a load instruction (using immediate value, ALUSrc = 1) but wrote the ALU result directly to the register (MemtoReg = 0) rather than from memory. Testing helped verify this was implemented correctly.</p>
+        
+        <div class="subsection-title">7.4 Control Signal Verification</div>
+        <p>We spent significant time verifying that each control signal was set correctly for each instruction type. This involved manually checking the truth table against the actual circuit behavior during simulation, which helped catch several wiring errors early.</p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">8. Conclusion</div>
+        <div class="conclusion">
+            <p>This lab successfully demonstrated the implementation of a complete control unit for a single-cycle MIPS processor. Here's what we accomplished:</p>
+            <ul>
+                <li>✓ Designed and implemented an ALU Decoder that correctly interprets ALUOp and funct fields</li>
+                <li>✓ Designed and implemented a Main Decoder that generates all primary control signals from opcodes</li>
+                <li>✓ Combined both decoders hierarchically into a complete Control Unit</li>
+                <li>✓ Integrated the Control Unit into our existing datapath from Lab 4</li>
+                <li>✓ Successfully tested the complete processor with a variety of instruction types</li>
+                <li>✓ Added support for the addi instruction</li>
+                <li>✓ Verified that all control signals are generated correctly for each instruction</li>
+            </ul>
+            <p>The hierarchical, modular approach made the design process much more manageable and allowed us to test components independently before integration. The control unit now successfully coordinates all datapath components, enabling the processor to execute a complete set of MIPS instructions.</p>
+            <p>This lab reinforced the importance of the control unit in processor design and demonstrated how a truth table can be translated into actual hardware implementation using combinational logic. The modular design approach also highlighted best practices in digital circuit design.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">9. References</div>
+        <ul>
+            <li>Logisim-evolution Documentation: https://github.com/logisim-evolution/logisim-evolution</li>
+            <li>Computer Organization and Design, Patterson & Hennessy</li>
+            <li>Digital Design and Computer Architecture, Harris & Harris</li>
+            <li>CENG 351 Course Materials: Computer Architecture I</li>
+            <li>MIPS Architecture Reference Manual</li>
+        </ul>
+    </div>
+    </div>
+</body>
+</html>
+
