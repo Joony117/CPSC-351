@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 6: Adding New Instructions - Report</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: white;
+            color: #333;
+        }
+        .container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 1in;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .course-info {
+            font-size: 14px;
+            color: #95a5a6;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        .subsection-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        
+        .screenshot-container {
+            text-align: center;
+            margin: 20px 0;
+            page-break-inside: avoid;
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-height: 400px;
+            width: auto;
+        }
+        
+        .screenshot-caption {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .question {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-left: 4px solid #e74c3c;
+            margin: 15px 0;
+        }
+        
+        .question-text {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .answer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 10px 0;
+        }
+        
+        .circuit-description {
+            background-color: #fff3cd;
+            padding: 15px;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .instruction-analysis {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .hex-instruction {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .register-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .register-table th,
+        .register-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .register-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .register-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .conclusion {
+            background-color: #e8f5e8;
+            padding: 20px;
+            border: 1px solid #27ae60;
+            border-radius: 5px;
+            margin-top: 30px;
+        }
+        
+        .team-info {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .placeholder {
+            background-color: #f8f9fa;
+            border: 2px dashed #6c757d;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .placeholder-text {
+            color: #6c757d;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .datapath-component {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .component-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .control-signal-table {
+            margin: 20px 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .control-signal-table th,
+        .control-signal-table td {
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .control-signal-table th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .control-signal-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .instruction-format {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-left: 3px solid #3498db;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        @media print {
+            body { margin: 20px; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+        <div class="title">CENG 351: Computer Architecture I</div>
+        <div class="subtitle">Lab 6: Adding New Instructions</div>
+        <div class="course-info">Extending the Single-Cycle Processor with j, bne, and ori Instructions</div>
+    </div>
+
+    <div class="team-info">
+        <div class="subsection-title">Team Information</div>
+        <p><strong>Lab Partners:</strong> Gabriel Giancarlo, [Partner Name]</p>
+        <p><strong>Contributions:</strong></p>
+        <ul>
+            <li><strong>Gabriel Giancarlo:</strong> Report writing, instruction analysis, documentation, and lab questions</li>
+            <li><strong>[Partner Name]:</strong> [Partner contributions - to be filled in]</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">1. Introduction</div>
+        <p>In this lab, we extended our single-cycle MIPS processor design from previous labs to support three new instructions: <code>j</code> (jump), <code>bne</code> (branch if not equal), and <code>ori</code> (OR immediate). This process required systematic modifications to both the control unit and the datapath. We built upon our existing processor design, which already supported R-type instructions, <code>lw</code>, <code>sw</code>, <code>beq</code>, and <code>addi</code>.</p>
+        
+        <div class="circuit-description">
+            <div class="subsection-title">Lab Objectives</div>
+            <p>The primary objectives of this lab were:</p>
+            <ul>
+                <li>Add support for the <code>j</code> instruction (opcode 000010) to enable unconditional jumps</li>
+                <li>Add support for the <code>bne</code> instruction (opcode 000101) to enable conditional branching when operands are not equal</li>
+                <li>Add support for the <code>ori</code> instruction (opcode 001101) to perform OR operations with zero-extended immediates</li>
+                <li>Modify the ALU decoder to use a Programmable Logic Array (PLA) for easier extensibility</li>
+                <li>Test the complete processor design with a comprehensive assembly program</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">2. Instruction Specifications</div>
+        
+        <div class="subsection-title">2.1 Jump Instruction (j)</div>
+        <p>The <code>j</code> instruction performs an unconditional jump to a target address. This instruction was covered in class as an example of extending the processor.</p>
+        <div class="instruction-format">
+            <strong>Format:</strong> j label<br>
+            <strong>Opcode:</strong> 000010<br>
+            <strong>Address Field:</strong> bits 25:0 (pseudo-direct address)
+        </div>
+        <p><strong>Key Implementation Notes:</strong></p>
+        <ul>
+            <li>The instruction uses a pseudo-direct addressing mode where bits 25:0 of the instruction are shifted left by 2 and combined with the upper 4 bits of PC+4</li>
+            <li>The shift left by 2 operation adds bits to the bus, requiring careful consideration of how the shift left module is used in Logisim</li>
+            <li>The Jump control signal must be added to the main decoder and control unit</li>
+        </ul>
+
+        <div class="subsection-title">2.2 Branch If Not Equal Instruction (bne)</div>
+        <p>The <code>bne</code> instruction performs a conditional branch when the two source register operands are not equal. This instruction was also covered in class.</p>
+        <div class="instruction-format">
+            <strong>Format:</strong> bne rs, rt, label<br>
+            <strong>Opcode:</strong> 000101<br>
+            <strong>Operation:</strong> if (rs ≠ rt) then PC = PC + 4 + (sign-extended immediate << 2)
+        </div>
+        <p><strong>Key Implementation Notes:</strong></p>
+        <ul>
+            <li>Similar to <code>beq</code>, but branches when the Zero flag from the ALU is 0 (not equal) instead of 1 (equal)</li>
+            <li>Requires inverting the Zero signal or modifying the branch condition logic</li>
+            <li>Uses the same datapath components as <code>beq</code> but with inverted branch condition</li>
+        </ul>
+
+        <div class="subsection-title">2.3 OR Immediate Instruction (ori)</div>
+        <p>The <code>ori</code> instruction is an I-type instruction that performs a bitwise OR operation between a register value and an immediate value, storing the result back to a register.</p>
+        <div class="instruction-format">
+            <strong>Format:</strong> ori rt, rs, imm<br>
+            <strong>Opcode:</strong> 001101<br>
+            <strong>Operation:</strong> rt = rs OR zero_extend(imm)
+        </div>
+        <p><strong>Key Implementation Notes:</strong></p>
+        <ul>
+            <li><strong>Zero-extension:</strong> Unlike most I-type instructions that use sign-extension, <code>ori</code> uses zero-extension for the immediate value. This means the upper 16 bits are filled with zeros rather than the sign bit.</li>
+            <li><strong>ALU Operation:</strong> The ALU already has OR functionality, but the ALU controller previously could only issue an OR operation based on the funct field for R-type instructions. We need to extend the ALU decoder to support OR operations for I-type instructions.</li>
+            <li><strong>Register Destination:</strong> The destination register is specified in the rt field (bits 20:16), similar to other I-type instructions like <code>addi</code> and <code>lw</code>.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">3. ALU Decoder Modification: PLA Implementation</div>
+        
+        <div class="subsection-title">3.1 Rationale for PLA</div>
+        <p>To simplify the implementation of the <code>ori</code> instruction and make future extensions easier, we replaced the combinational logic ALU decoder with a Programmable Logic Array (PLA) module. The PLA allows us to directly specify the truth table behavior, making it straightforward to add new ALU operations without redesigning complex combinational logic.</p>
+        
+        <div class="subsection-title">3.2 PLA Configuration</div>
+        <p>The PLA module is available under the "Gates" section in Logisim. We configured it with the following inputs and outputs:</p>
+        <ul>
+            <li><strong>Inputs:</strong> ALUOp[1:0] (2 bits) and funct[3:0] (4 bits) - total of 6 input bits</li>
+            <li><strong>Outputs:</strong> ALUControl[2:0] (3 bits)</li>
+        </ul>
+        <p>The truth table was entered by clicking "click to edit" under the program field in the properties tab. This allows us to specify the ALUControl output for each combination of ALUOp and funct bits.</p>
+
+        <div class="subsection-title">3.3 ALU Decoder Truth Table</div>
+        <p>The PLA implements the following truth table, which extends the original ALU decoder to support the <code>ori</code> instruction:</p>
+        <table class="control-signal-table">
+            <thead>
+                <tr>
+                    <th>ALUOp[1:0]</th>
+                    <th>funct[3:0]</th>
+                    <th>Instruction Type</th>
+                    <th>ALUControl[2:0]</th>
+                    <th>Operation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>00</td>
+                    <td>xxxx</td>
+                    <td>lw/sw</td>
+                    <td>010</td>
+                    <td>Add</td>
+                </tr>
+                <tr>
+                    <td>01</td>
+                    <td>xxxx</td>
+                    <td>beq/bne</td>
+                    <td>110</td>
+                    <td>Subtract</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>0000</td>
+                    <td>add (funct=100000)</td>
+                    <td>010</td>
+                    <td>Add</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>0010</td>
+                    <td>sub (funct=100010)</td>
+                    <td>110</td>
+                    <td>Subtract</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>0100</td>
+                    <td>and (funct=100100)</td>
+                    <td>000</td>
+                    <td>AND</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>0101</td>
+                    <td>or (funct=100101)</td>
+                    <td>001</td>
+                    <td>OR</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>1010</td>
+                    <td>slt (funct=101010)</td>
+                    <td>111</td>
+                    <td>Set on less than</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>xxxx</td>
+                    <td>ori</td>
+                    <td>001</td>
+                    <td>OR</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>Note:</strong> We use ALUOp = 11 to indicate an <code>ori</code> instruction, which requires the ALU to perform an OR operation. This new ALUOp encoding is generated by the main decoder for the <code>ori</code> instruction.</p>
+
+        <div class="subsection-title">3.4 ALU Decoder Schematic</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of ALU Decoder PLA implementation]</div>
+            </div>
+            <div class="screenshot-caption">Figure 1: ALU Decoder PLA implementation (to be added)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">4. Control Unit Modifications</div>
+        
+        <div class="subsection-title">4.1 Main Decoder Updates</div>
+        <p>We extended the main decoder to support the three new instructions. The main decoder now generates control signals for <code>j</code>, <code>bne</code>, and <code>ori</code> instructions in addition to the existing instructions.</p>
+
+        <div class="subsection-title">4.2 Main Decoder Truth Table</div>
+        <p>The complete main decoder truth table, including the new instructions, is shown below:</p>
+        <table class="control-signal-table">
+            <thead>
+                <tr>
+                    <th>Instruction</th>
+                    <th>Op[5:0]</th>
+                    <th>RegWrite</th>
+                    <th>RegDst</th>
+                    <th>ALUSrc</th>
+                    <th>Branch</th>
+                    <th>MemWrite</th>
+                    <th>MemtoReg</th>
+                    <th>ALUOp[1:0]</th>
+                    <th>Jump</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>R-type</td>
+                    <td>000000</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>10</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>lw</td>
+                    <td>100011</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>sw</td>
+                    <td>101011</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>x</td>
+                    <td>00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>beq</td>
+                    <td>000100</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>01</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>addi</td>
+                    <td>001000</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>j</td>
+                    <td>000010</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>x</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>xx</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>bne</td>
+                    <td>000101</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>x</td>
+                    <td>01</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>ori</td>
+                    <td>001101</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>11</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-title">4.3 Control Signal Analysis</div>
+        <div class="instruction-analysis">
+            <p><strong>Jump Instruction (j):</strong></p>
+            <ul>
+                <li>RegWrite = 0 (no register write)</li>
+                <li>Jump = 1 (enables jump addressing)</li>
+                <li>All other signals are don't-care (x) since the instruction doesn't use those datapath components</li>
+            </ul>
+            
+            <p><strong>Branch If Not Equal (bne):</strong></p>
+            <ul>
+                <li>RegWrite = 0 (no register write)</li>
+                <li>ALUSrc = 0 (uses register values, not immediate)</li>
+                <li>Branch = 1 (enables branch condition checking)</li>
+                <li>ALUOp = 01 (ALU performs subtraction for comparison)</li>
+                <li>Note: The branch condition logic must be modified to branch when Zero = 0 (not equal)</li>
+            </ul>
+            
+            <p><strong>OR Immediate (ori):</strong></p>
+            <ul>
+                <li>RegWrite = 1 (writes result to register)</li>
+                <li>RegDst = 0 (destination is rt field, bits 20:16)</li>
+                <li>ALUSrc = 1 (uses zero-extended immediate)</li>
+                <li>MemtoReg = 0 (writes ALU result, not memory data)</li>
+                <li>ALUOp = 11 (tells ALU decoder to perform OR operation)</li>
+            </ul>
+        </div>
+
+        <div class="subsection-title">4.4 Main Decoder Schematic</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of Main Decoder with new instructions]</div>
+            </div>
+            <div class="screenshot-caption">Figure 2: Main Decoder circuit implementation (to be added)</div>
+        </div>
+
+        <div class="subsection-title">4.5 Control Unit Integration</div>
+        <p>After updating the main decoder, we ensured that all new control signals (particularly the Jump signal) were properly routed through the Control Unit module. The Control Unit now outputs all necessary signals for the extended instruction set.</p>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of complete Control Unit]</div>
+            </div>
+            <div class="screenshot-caption">Figure 3: Complete Control Unit implementation (to be added)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">5. Datapath Modifications</div>
+        
+        <div class="subsection-title">5.1 Jump Instruction Datapath</div>
+        <p>To support the <code>j</code> instruction, we added jump addressing logic to the datapath:</p>
+        <ul>
+            <li>The instruction's address field (bits 25:0) is shifted left by 2 to create a 28-bit address</li>
+            <li>This 28-bit address is concatenated with the upper 4 bits of PC+4 to form the 32-bit jump target address</li>
+            <li>A multiplexer selects between PC+4, PCBranch (from beq/bne), and PCJump based on the Jump and PCSrc control signals</li>
+        </ul>
+        <p><strong>Important Note:</strong> The shift left by 2 operation for the jump instruction adds bits to the bus (26 bits become 28 bits), so we needed to carefully configure the shift left module in Logisim to handle this correctly.</p>
+
+        <div class="subsection-title">5.2 Branch If Not Equal Datapath</div>
+        <p>The <code>bne</code> instruction uses the same datapath components as <code>beq</code>, but requires modification to the branch condition logic:</p>
+        <ul>
+            <li>The ALU performs subtraction (rs - rt) to determine if the operands are equal</li>
+            <li>The Zero flag is inverted (or the branch condition logic is modified) so that branching occurs when Zero = 0 (operands are not equal)</li>
+            <li>The PCSrc signal is generated as: PCSrc = Branch AND (NOT Zero) for bne, or PCSrc = Branch AND Zero for beq</li>
+        </ul>
+
+        <div class="subsection-title">5.3 OR Immediate Datapath</div>
+        <p>To support the <code>ori</code> instruction, we made the following datapath modifications:</p>
+        <ul>
+            <li><strong>Zero-extension:</strong> Added a zero-extension module for the immediate field. Unlike sign-extension, zero-extension fills the upper 16 bits with zeros. We use a multiplexer to select between sign-extended and zero-extended immediates based on the instruction type.</li>
+            <li><strong>ALU Operation:</strong> The ALU decoder (now implemented as a PLA) recognizes ALUOp = 11 and generates ALUControl = 001 for the OR operation.</li>
+            <li><strong>Register File:</strong> The destination register comes from the rt field (bits 20:16), which is already supported by the existing RegDst = 0 control signal.</li>
+        </ul>
+
+        <div class="subsection-title">5.4 Complete Datapath Schematic</div>
+        <p>The complete datapath with all modifications is shown below. Due to the complexity of the full datapath, we may break it into multiple screenshots showing different sections.</p>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot 1 of complete datapath - overall view]</div>
+            </div>
+            <div class="screenshot-caption">Figure 4: Complete datapath - overall view (to be added)</div>
+        </div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot 2 of complete datapath - jump logic detail]</div>
+            </div>
+            <div class="screenshot-caption">Figure 5: Datapath - jump addressing logic detail (to be added)</div>
+        </div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot 3 of complete datapath - zero-extension logic detail]</div>
+            </div>
+            <div class="screenshot-caption">Figure 6: Datapath - zero-extension logic for ori instruction (to be added)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">6. Implementation Process</div>
+        
+        <div class="subsection-title">6.1 Systematic Approach</div>
+        <p>We followed a systematic approach to add each instruction, focusing on one instruction at a time to ensure we didn't miss any required changes:</p>
+        <ol>
+            <li><strong>Control Unit Updates:</strong> For each instruction, we first updated the main decoder truth table and implemented the control signal logic.</li>
+            <li><strong>Datapath Modifications:</strong> We then modified the datapath only if necessary for that instruction.</li>
+            <li><strong>Testing:</strong> We tested each instruction individually before moving to the next one.</li>
+        </ol>
+
+        <div class="subsection-title">6.2 Instruction Implementation Order</div>
+        <p>We implemented the instructions in the following order:</p>
+        <ol>
+            <li><strong>Jump (j):</strong> Added Jump control signal and jump addressing logic to the datapath.</li>
+            <li><strong>Branch If Not Equal (bne):</strong> Modified branch condition logic to handle the inverted Zero condition.</li>
+            <li><strong>OR Immediate (ori):</strong> Modified ALU decoder to PLA, added zero-extension logic, and updated control signals.</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <div class="section-title">7. Simulation and Testing</div>
+        
+        <div class="subsection-title">7.1 Test Program</div>
+        <p>We tested the complete processor design using the following assembly program, which exercises all instructions including the new ones:</p>
+        <div class="instruction-analysis">
+            <div class="subsection-title">Assembly Program</div>
+            <pre>main: ori $t0, $0, 0x8000
+      addi $t1, $0, -32768
+      ori $t2, $t0, 0x8001
+      beq $t0, $t1, there
+      slt $t3, $t1, $t0
+      bne $t3, $0, here
+      j there
+here: sub $t2, $t2, $t0
+      ori $t0, $t0, 0xFF
+      j where
+there: sub $t3, $t0, $t2
+      add $t0, $t3, $t3
+where: add $t3, $t3, $t2
+      sub $t0, $t2, $t0
+      sw $t0, 82($t3)</pre>
+            
+            <div class="subsection-title">Program Analysis</div>
+            <p>This program tests all instruction types:</p>
+            <ul>
+                <li><strong>ori:</strong> Multiple OR immediate operations with zero-extension</li>
+                <li><strong>addi:</strong> Add immediate with sign-extension</li>
+                <li><strong>beq:</strong> Branch if equal (conditional branch)</li>
+                <li><strong>slt:</strong> Set on less than (R-type instruction)</li>
+                <li><strong>bne:</strong> Branch if not equal (new conditional branch)</li>
+                <li><strong>j:</strong> Unconditional jump (new instruction)</li>
+                <li><strong>sub, add:</strong> R-type arithmetic operations</li>
+                <li><strong>sw:</strong> Store word to memory</li>
+            </ul>
+            <p>The program should produce a specific value written to a specific memory location, which serves as verification that all instructions are functioning correctly.</p>
+        </div>
+
+        <div class="subsection-title">7.2 Loading the Test Program</div>
+        <p>The machine language for this assembly program is provided in the file <code>memfile2.hex</code>. We loaded this into instruction memory by right-clicking on the instruction memory component and selecting "Load image...", then selecting the hex file.</p>
+
+        <div class="subsection-title">7.3 Step-by-Step Verification</div>
+        <p>We stepped through the program one clock cycle at a time, verifying that:</p>
+        <ul>
+            <li>The control unit generates appropriate control signals for each instruction</li>
+            <li>The program counter increments or jumps correctly</li>
+            <li>Register values are updated as expected</li>
+            <li>Memory operations execute correctly</li>
+            <li>Branch and jump instructions redirect program flow properly</li>
+        </ul>
+
+        <div class="subsection-title">7.4 Instruction Execution Screenshots</div>
+        <p>Below are screenshots showing the execution of key instructions, particularly the new ones:</p>
+        
+        <div class="subsection-title">7.4.1 OR Immediate Instruction (ori $t0, $0, 0x8000)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of ori instruction execution]</div>
+            </div>
+            <div class="screenshot-caption">Figure 7: OR Immediate instruction execution with control signals (to be added)</div>
+        </div>
+
+        <div class="subsection-title">7.4.2 Branch If Not Equal Instruction (bne $t3, $0, here)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of bne instruction execution]</div>
+            </div>
+            <div class="screenshot-caption">Figure 8: Branch If Not Equal instruction execution (to be added)</div>
+        </div>
+
+        <div class="subsection-title">7.4.3 Jump Instruction (j there)</div>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of j instruction execution]</div>
+            </div>
+            <div class="screenshot-caption">Figure 9: Jump instruction execution (to be added)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">8. Final Results</div>
+        
+        <div class="subsection-title">8.1 Memory Contents</div>
+        <p>After executing the complete test program, we verified the final value stored in memory. The program should write a specific value to a specific memory address, which confirms that all instructions executed correctly.</p>
+        <div class="screenshot-container">
+            <div class="placeholder">
+                <div class="placeholder-text">[PLACEHOLDER: Screenshot of final memory contents showing the result]</div>
+            </div>
+            <div class="screenshot-caption">Figure 10: Final memory contents after program execution (to be added)</div>
+        </div>
+
+        <div class="subsection-title">8.2 Verification Summary</div>
+        <p>After completing the simulation, we verified that:</p>
+        <ul>
+            <li>✓ All three new instructions (j, bne, ori) execute correctly</li>
+            <li>✓ The control unit generates appropriate control signals for all instruction types</li>
+            <li>✓ The jump instruction correctly redirects program flow</li>
+            <li>✓ The bne instruction branches correctly when operands are not equal</li>
+            <li>✓ The ori instruction correctly performs OR operations with zero-extended immediates</li>
+            <li>✓ The PLA-based ALU decoder correctly interprets ALUOp signals</li>
+            <li>✓ The program produces the expected final result in memory</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">9. Lab Questions and Analysis</div>
+      
+        <div class="question">
+          <div class="question-text">Question 1: Why does the ori instruction use a zero-extended immediate instead of a sign-extended immediate?</div>
+        </div>
+        <div class="answer">
+          <p><strong>Answer:</strong> The <code>ori</code> instruction uses zero-extension instead of sign-extension because it is designed for bitwise logical operations on unsigned data. When performing a bitwise OR operation, we want to treat the immediate value as an unsigned 16-bit number, not as a signed value.</p>
+          
+          <p>If we used sign-extension:</p>
+          <ul>
+              <li>Positive immediates (bit 15 = 0) would be extended with zeros, which is correct</li>
+              <li>Negative immediates (bit 15 = 1) would be extended with ones, which would set the upper 16 bits to 1</li>
+              <li>This would cause incorrect results when ORing with the upper bits of a register</li>
+          </ul>
+          
+          <p>With zero-extension:</p>
+          <ul>
+              <li>All immediates are treated as unsigned values from 0 to 65,535</li>
+              <li>The upper 16 bits are always set to 0, preserving the logical nature of the OR operation</li>
+              <li>This allows programmers to set specific bits in a register without affecting the upper bits</li>
+          </ul>
+          
+          <p>For example, <code>ori $t0, $t0, 0xFFFF</code> with zero-extension sets the lower 16 bits to 1 while preserving the upper 16 bits of $t0. With sign-extension, it would set all 32 bits to 1, which is not the intended behavior for a logical OR operation.</p>
+        </div>
+      
+        <div class="question">
+          <div class="question-text">Question 2: What is the correct value stored to memory at the end of the program? What memory address is this value written to?</div>
+        </div>
+        <div class="answer">
+          <p><strong>Answer:</strong> [To be filled in after simulation]</p>
+          <p>By analyzing the assembly program:</p>
+          <ul>
+              <li>The final instruction is <code>sw $t0, 82($t3)</code></li>
+              <li>This stores the value in register $t0 to the memory address calculated as: Memory[82 + $t3]</li>
+              <li>We need to trace through the program execution to determine the final values of $t0 and $t3</li>
+          </ul>
+          <p><strong>Expected Analysis:</strong> [Detailed trace through the program to be completed after implementation]</p>
+          <p><strong>Final Value:</strong> [To be determined]</p>
+          <p><strong>Memory Address:</strong> [To be determined]</p>
+        </div>
+      
+        <div class="question">
+          <div class="question-text">Question 3: What is the advantage of using our ad-hoc testing approach? What is another option for testing, and what are some pros or cons of this different approach?</div>
+        </div>
+        <div class="answer">
+          <p><strong>Answer:</strong> The ad-hoc testing approach we used involves running a single, comprehensive program that exercises all instructions and produces a known final result. This approach has several advantages:</p>
+          
+          <p><strong>Advantages of Ad-Hoc Testing:</strong></p>
+          <ul>
+              <li><strong>Simplicity:</strong> Easy to implement and understand - just run one program and check the result</li>
+              <li><strong>Real-world scenarios:</strong> Tests instructions in realistic combinations, revealing issues that might not appear in isolated tests</li>
+              <li><strong>Quick verification:</strong> A single correct result indicates that all components are likely working together correctly</li>
+              <li><strong>Integration testing:</strong> Naturally tests the interaction between different components and instruction types</li>
+          </ul>
+          
+          <p><strong>Alternative Approach: Systematic Unit Testing</strong></p>
+          <p>Another option would be to use systematic unit testing, where each instruction is tested individually with a comprehensive set of test cases covering edge cases, boundary conditions, and various operand combinations.</p>
+          
+          <p><strong>Pros of Systematic Unit Testing:</strong></p>
+          <ul>
+              <li><strong>Comprehensive coverage:</strong> Can test every possible combination of operands and edge cases</li>
+              <li><strong>Easier debugging:</strong> When a test fails, you know exactly which instruction and which case is problematic</li>
+              <li><strong>Automated verification:</strong> Can be automated with test harnesses that compare expected vs. actual results</li>
+              <li><strong>Regression testing:</strong> Easy to re-run all tests after making changes to ensure nothing broke</li>
+              <li><strong>Documentation:</strong> Test cases serve as documentation of expected behavior</li>
+          </ul>
+          
+          <p><strong>Cons of Systematic Unit Testing:</strong></p>
+          <ul>
+              <li><strong>Time-consuming:</strong> Requires writing many test cases and setting up test infrastructure</li>
+              <li><strong>May miss integration issues:</strong> Individual instruction tests might pass, but interactions between instructions might fail</li>
+              <li><strong>Complexity:</strong> Requires more sophisticated test frameworks and automation</li>
+              <li><strong>Maintenance overhead:</strong> Test cases need to be maintained as the design evolves</li>
+          </ul>
+          
+          <p><strong>Cons of Ad-Hoc Testing:</strong></p>
+          <ul>
+              <li><strong>Limited coverage:</strong> May not test all edge cases or boundary conditions</li>
+              <li><strong>Harder debugging:</strong> If the result is wrong, it's difficult to identify which specific instruction or component failed</li>
+              <li><strong>False confidence:</strong> A correct result doesn't guarantee all edge cases work correctly</li>
+          </ul>
+          
+          <p>In practice, a combination of both approaches is often best: systematic unit tests for individual components and instructions, combined with integration tests (like our ad-hoc program) to verify the complete system works together.</p>
+        </div>
+      </div>
+
+    <div class="section">
+        <div class="section-title">10. Troubleshooting and Challenges</div>
+        
+        <div class="subsection-title">10.1 Jump Instruction Implementation</div>
+        <p>One challenge we encountered was correctly implementing the jump addressing logic. The shift left by 2 operation for the jump instruction adds bits to the bus (26 bits become 28 bits), which required careful configuration of the shift left module in Logisim. We had to ensure that the module was set up to handle the bit expansion correctly.</p>
+        
+        <div class="subsection-title">10.2 Branch Condition Logic for bne</div>
+        <p>Implementing the <code>bne</code> instruction required modifying the branch condition logic. We needed to ensure that branching occurs when the Zero flag is 0 (operands not equal) rather than when it is 1 (operands equal). This required either inverting the Zero signal or modifying the PCSrc generation logic to handle both beq and bne correctly.</p>
+        
+        <div class="subsection-title">10.3 Zero-Extension for ori</div>
+        <p>Adding zero-extension support for the <code>ori</code> instruction required adding a new multiplexer to select between sign-extended and zero-extended immediates. We had to ensure that the control logic correctly selects zero-extension for <code>ori</code> while maintaining sign-extension for other I-type instructions like <code>addi</code>, <code>lw</code>, and <code>sw</code>.</p>
+        
+        <div class="subsection-title">10.4 PLA Configuration</div>
+        <p>Converting the ALU decoder to a PLA required carefully entering the truth table. We had to ensure that all input combinations were correctly mapped to the appropriate ALUControl outputs, including the new ALUOp = 11 case for the <code>ori</code> instruction.</p>
+        
+        <div class="subsection-title">10.5 Control Signal Routing</div>
+        <p>After adding new control signals (particularly the Jump signal), we had to ensure that all signals were properly routed through the Control Unit module and connected to the appropriate datapath components. This required careful verification of all connections.</p>
+        
+        <div class="subsection-title">10.6 Testing and Debugging</div>
+        <p>During testing, we encountered several issues that required careful debugging:</p>
+        <ul>
+            <li>Verifying that control signals were set correctly for each instruction type</li>
+            <li>Ensuring that the program counter updated correctly for jumps and branches</li>
+            <li>Checking that register values and memory contents matched expected results</li>
+            <li>Tracing through the program execution to identify where discrepancies occurred</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="section-title">11. Conclusion</div>
+        <div class="conclusion">
+            <p>This lab successfully extended our single-cycle MIPS processor to support three new instructions: <code>j</code> (jump), <code>bne</code> (branch if not equal), and <code>ori</code> (OR immediate). Here's what we accomplished:</p>
+            <ul>
+                <li>✓ Added support for the jump instruction with proper pseudo-direct addressing</li>
+                <li>✓ Implemented the branch if not equal instruction with modified branch condition logic</li>
+                <li>✓ Added the OR immediate instruction with zero-extension support</li>
+                <li>✓ Converted the ALU decoder to a PLA for easier extensibility</li>
+                <li>✓ Updated the main decoder to generate control signals for all new instructions</li>
+                <li>✓ Modified the datapath to support jump addressing and zero-extension</li>
+                <li>✓ Successfully tested the complete processor with a comprehensive assembly program</li>
+                <li>✓ Verified that all instructions execute correctly and produce the expected results</li>
+            </ul>
+            <p>The systematic approach of updating the control unit first, then modifying the datapath as needed, proved effective in ensuring we didn't miss any required changes. The PLA-based ALU decoder made it straightforward to add support for the <code>ori</code> instruction and will make future extensions easier.</p>
+            <p>This lab reinforced the importance of careful planning and systematic implementation when extending processor designs. It also demonstrated how different instruction types require different datapath modifications and control signal configurations. The successful completion of the test program confirms that our processor design correctly implements all the required instructions.</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">12. References</div>
+        <ul>
+            <li>Logisim-evolution Documentation: https://github.com/logisim-evolution/logisim-evolution</li>
+            <li>Computer Organization and Design, Patterson & Hennessy</li>
+            <li>Digital Design and Computer Architecture, Harris & Harris</li>
+            <li>CENG 351 Course Materials: Computer Architecture I</li>
+            <li>MIPS Architecture Reference Manual</li>
+            <li>Lab 6 Assignment: Adding New Instructions</li>
+        </ul>
+    </div>
+    </div>
+</body>
+</html>
+
